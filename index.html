@@ -1,0 +1,288 @@
+<!DOCTYPE html><script type="application/json" id="cowork-artifact-meta">
+{
+  "name": "Dashboard Empresa Invernomics",
+  "schemaVersion": 1,
+  "description": "Dashboard general de Invernomics con diseño de marca, filtro por asesor y gráficos interactivos (pipeline por etapa, canal, facturación vs objetivo, conversión, embudo). Datos de Bitrix24, actualizado cada mañana."
+}
+</script>
+<html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<style>:root{color-scheme:light}</style>
+<title>Dashboard Invernomics</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.5.0/dist/chart.umd.js" integrity="sha384-iU8HYtnGQ8Cy4zl7gbNMOhsDTTKX02BTXptVP/vqAWIaTfM7isw76iyZCsjL2eVi" crossorigin="anonymous"></script>
+<style>
+:root{--navy:#162A41;--navy2:#0A1D27;--green:#B9C965;--green2:#8FA63E;--teal:#2E86AB;--amber:#E0A43B;--bg:#F1F3F6;--card:#fff;--ink:#1a2330;--muted:#6b7585;}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);font-family:'Segoe UI',Arial,Helvetica,sans-serif;color:var(--ink);}
+.wrap{max-width:960px;margin:0 auto;padding:16px;}
+.header{background:linear-gradient(120deg,var(--navy),var(--navy2));color:#fff;border-radius:14px;padding:16px 18px;display:flex;align-items:center;gap:14px;}
+.header img{height:52px;width:auto;background:#fff;border-radius:8px;padding:4px;}
+.header .t{flex:1}
+.header h1{font-size:19px;margin:0;font-weight:700;letter-spacing:.3px}
+.header .sub{font-size:12px;opacity:.85;margin-top:2px}
+.header .meta{text-align:right;font-size:11px;opacity:.8;line-height:1.5}
+.header .meta b{color:var(--green);font-size:13px}
+.filters{display:flex;flex-wrap:wrap;align-items:center;gap:8px;margin:14px 0 4px;}
+.filters .lbl{font-size:12px;color:var(--muted);font-weight:600;margin-right:4px}
+.chip{border:1.5px solid var(--navy);color:var(--navy);background:#fff;border-radius:20px;padding:6px 14px;font-size:13px;cursor:pointer;font-weight:600;transition:.15s;}
+.chip:hover{background:#eef1f6}
+.chip.active{background:var(--navy);color:#fff}
+.kpis{display:flex;flex-wrap:wrap;gap:12px;margin-top:12px}
+.kpi{flex:1;min-width:150px;background:var(--card);border-radius:12px;padding:15px;text-align:center;box-shadow:0 1px 3px rgba(0,0,0,.06)}
+.kpi .v{font-size:28px;font-weight:800;line-height:1.1}
+.kpi .l{font-size:11.5px;color:var(--muted);margin-top:4px}
+.kpi .s{font-size:11px;color:var(--green2);margin-top:3px;font-weight:600}
+.card{background:var(--card);border-radius:14px;padding:16px;margin-top:14px;box-shadow:0 1px 3px rgba(0,0,0,.06)}
+.card h2{font-size:15px;margin:0 0 2px;color:var(--navy)}
+.card .desc{font-size:12px;color:var(--muted);margin:0 0 12px}
+.row{display:flex;flex-wrap:wrap;gap:14px}
+.row .card{flex:1;min-width:300px;margin-top:0}
+.chartbox{position:relative;height:230px}
+.insight{font-size:12px;color:#2f4a66;background:#eef3f8;border-left:3px solid var(--navy);border-radius:7px;padding:9px 11px;margin-top:12px;line-height:1.5}
+.insight b{color:var(--navy)}
+.insight.g{background:#f1f6e6;border-left-color:var(--green2);color:#4e6019}
+.insight.g b{color:#4e6019}
+.insight.a{background:#fff6e8;border-left-color:var(--amber);color:#8a5a00}
+.insight.a b{color:#8a5a00}
+.pills{display:flex;gap:6px;margin-bottom:10px}
+.pill{border:1px solid #d3dae3;background:#fff;color:var(--muted);border-radius:16px;padding:4px 12px;font-size:12px;cursor:pointer;font-weight:600}
+.pill.active{background:var(--navy);color:#fff;border-color:var(--navy)}
+.goal{margin:10px 0}
+.goal .gh{font-size:13px;display:flex;justify-content:space-between;margin-bottom:4px}
+.track{background:#eceff3;height:13px;border-radius:7px;overflow:hidden}
+.fill{height:13px;border-radius:7px}
+.bars2{margin-top:6px}
+.bar2{font-size:13px;display:flex;justify-content:space-between;margin-bottom:3px}
+.alert{font-size:12px;color:#8a5a00;background:#fff8ec;border:1px solid #f0d9a8;border-radius:8px;padding:9px;margin-top:10px}
+.note{font-size:11px;color:#9aa3b0;margin:14px 4px}
+table{width:100%;border-collapse:collapse;font-size:13px}
+th,td{padding:6px 6px;text-align:left}
+th{color:var(--muted);font-weight:600;border-bottom:1px solid #edf0f3}
+td{border-bottom:1px solid #f4f6f8}
+td.r,th.r{text-align:right}
+.hidden{display:none}
+</style></head>
+<body>
+<div class="wrap">
+
+<div class="header">
+<img src="data:image/png;base64,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" alt="Invernomics">
+<div class="t"><h1>Dashboard — Visión general</h1><div class="sub">Pipeline y negocio · Bitrix24</div></div>
+<div class="meta">Datos al 22/06/2026<br>Objetivo mensual <b>50.000 €</b><br>Actualización diaria</div>
+</div>
+
+<div class="filters">
+<span class="lbl">Filtrar por asesor:</span>
+<span class="chip active" data-a="Todos" onclick="sel(this)">Todos</span>
+<span class="chip" data-a="Flor" onclick="sel(this)">Flor</span>
+<span class="chip" data-a="Facundo" onclick="sel(this)">Facundo</span>
+<span class="chip" data-a="Isled" onclick="sel(this)">Isled</span>
+<span class="chip" data-a="David" onclick="sel(this)">David</span>
+<span class="chip" data-a="Kelvin" onclick="sel(this)">Kelvin</span>
+</div>
+
+<div class="kpis">
+<div class="kpi"><div class="v" id="k_ops" style="color:var(--green2)">–</div><div class="l">Operaciones EN MARCHA</div><div class="s" id="k_ops_s" style="color:#9aa3b0;font-weight:400">comprometidas</div></div>
+<div class="kpi"><div class="v" id="k_hon" style="color:var(--navy)">–</div><div class="l">Honorarios en marcha</div><div class="s" style="color:#9aa3b0;font-weight:400">pipeline comprometido</div></div>
+<div class="kpi"><div class="v" id="k_fac" style="color:var(--navy)">–</div><div class="l">Facturado este mes (jun)</div><div class="s" id="k_fac_s"></div></div>
+<div class="kpi"><div class="v" id="k_conv" style="color:#c0392b">53%</div><div class="l">Conversión encargo→ganada</div><div class="s" style="color:#9aa3b0;font-weight:400">global · 6 meses</div></div>
+</div>
+
+<div class="card hidden" id="bonoCard"></div>
+
+<div class="row" style="margin-top:14px">
+<div class="card">
+<h2>🟢 Operaciones en marcha — por etapa</h2>
+<p class="desc" id="em_desc">Compromiso del cliente firmado: de Nota de encargo a FEIN firmada.</p>
+<div class="chartbox"><canvas id="stageChart"></canvas></div>
+<div class="insight" id="em_note"></div>
+</div>
+<div class="card">
+<h2>📥 Canal de origen</h2>
+<p class="desc">De dónde vienen las operaciones en marcha.</p>
+<div class="chartbox"><canvas id="canalChart"></canvas></div>
+<div class="insight" id="canal_note"></div>
+</div>
+</div>
+
+<div class="card">
+<h2>💶 Facturación <span id="fac_scope" style="font-weight:400;color:var(--muted);font-size:12px"></span></h2>
+<div class="pills">
+<span class="pill active" data-p="mensual" onclick="selP(this)">Mensual</span>
+<span class="pill" data-p="trimestral" onclick="selP(this)">Trimestral</span>
+<span class="pill" data-p="semestral" onclick="selP(this)">Semestral</span>
+</div>
+<p class="desc" id="fac_desc">Honorarios ganados (factura pagada) por mes contable.</p>
+<div class="chartbox" style="height:250px"><canvas id="monthChart"></canvas></div>
+<div class="insight" id="fac_note"></div>
+</div>
+
+<div class="row">
+<div class="card">
+<h2>🎯 Tasas de conversión <span style="font-weight:400;color:var(--muted);font-size:12px">(global · 6 meses)</span></h2>
+<p class="desc">49 ganadas · 616 perdidas en el periodo.</p>
+<div class="bars2">
+<div class="bar2"><span>Lead → compromiso (encargo)</span><b>13,8%</b></div>
+<div class="track"><div class="fill" style="width:14%;background:var(--amber)"></div></div>
+<div style="font-size:11px;color:var(--muted);margin:3px 0 12px">~1 de cada 7 leads llega a comprometerse.</div>
+<div class="bar2"><span>Compromiso → ganada (factura)</span><b>53,3%</b></div>
+<div class="track"><div class="fill" style="width:53%;background:var(--green2)"></div></div>
+<div style="font-size:11px;color:var(--muted);margin-top:3px">Caídas tras compromiso: 17 denegadas por banco · 26 firmaron con su banco.</div>
+</div>
+<div class="insight g">💡 <b>El cuello está en captar, no en ejecutar.</b> Comprometidos cierran al 53%, pero solo el 14% de leads se comprometen. Tip: reforzar la calificación en la primera llamada y el seguimiento del embudo previo rinde más que perseguir operaciones ya firmadas.</div>
+</div>
+<div class="card">
+<h2>⚪ Embudo previo <span style="font-weight:400;color:var(--muted);font-size:12px">(global)</span></h2>
+<p class="desc">Sin compromiso aún. 89 operaciones en total.</p>
+<table>
+<tr><th>Etapa</th><th class="r">Ops</th><th style="width:42%">Volumen</th></tr>
+<tr><td>💬 Lead</td><td class="r">7</td><td><div class="track" style="margin-top:3px;height:11px"><div class="fill" style="width:11%;height:11px;background:#c1c8d2"></div></div></td></tr>
+<tr><td>🗣️ Asesoramiento realizado</td><td class="r">61</td><td><div class="track" style="margin-top:3px;height:11px"><div class="fill" style="width:100%;height:11px;background:#8a96a6"></div></div></td></tr>
+<tr><td>📄 Documentación recibida</td><td class="r">21</td><td><div class="track" style="margin-top:3px;height:11px"><div class="fill" style="width:34%;height:11px;background:#c1c8d2"></div></div></td></tr>
+</table>
+<div class="alert">⚠️ <b>61 expedientes</b> en "asesoramiento realizado" sin avanzar a encargo — el mayor cuello de botella. Tip: campaña de seguimiento (llamada/recordatorio) sobre ese grupo; al 14% de conversión son ~9 encargos potenciales (~45.000 € en honorarios).</div>
+</div>
+</div>
+
+<p class="note">Datos de Bitrix24 (categoría principal). "En marcha" = Nota de encargo, Revisión de bancos, Aprobados por bancos y FEIN firmada. Embudo previo y conversión son globales. Vistas Trimestral/Semestral son del equipo completo. Bono trimestral 30.000 € / semestral 50.000 € por asesor. Se actualiza automáticamente cada mañana.</p>
+
+</div>
+
+<script>
+const DATA={
+ Todos:{ops:{nota:13,revision:41,aprob:2,fein:3},hon:{nota:50000,revision:192400,aprob:5000,fein:12000},canal:{Lead:39,Particular:10,Jorge:8,Inmob:2},mon:{ene:60000,feb:17300,mar:42500,abr:14300,may:31700,jun:42000},totOps:59,totHon:259400,facMes:42000},
+ Flor:{ops:{nota:1,revision:6,aprob:0,fein:0},hon:{nota:4000,revision:28400,aprob:0,fein:0},canal:{Lead:4,Particular:2,Jorge:1,Inmob:0},mon:{ene:11500,feb:9800,mar:0,abr:8300,may:18200,jun:10500},totOps:7,totHon:32400,facMes:10500},
+ Facundo:{ops:{nota:1,revision:11,aprob:0,fein:2},hon:{nota:5000,revision:53500,aprob:0,fein:10000},canal:{Lead:10,Particular:1,Jorge:1,Inmob:2},mon:{ene:15500,feb:0,mar:14500,abr:2500,may:4500,jun:10000},totOps:14,totHon:68500,facMes:10000},
+ Isled:{ops:{nota:1,revision:12,aprob:1,fein:0},hon:{nota:5000,revision:59000,aprob:2000,fein:0},canal:{Lead:9,Particular:5,Jorge:0,Inmob:0},mon:{ene:11000,feb:0,mar:18000,abr:3500,may:0,jun:18500},totOps:14,totHon:66000,facMes:18500},
+ David:{ops:{nota:9,revision:11,aprob:0,fein:0},hon:{nota:33000,revision:46500,aprob:0,fein:0},canal:{Lead:15,Particular:2,Jorge:3,Inmob:0},mon:{ene:0,feb:0,mar:0,abr:0,may:0,jun:0},totOps:20,totHon:79500,facMes:0},
+ Kelvin:{ops:{nota:1,revision:1,aprob:1,fein:1},hon:{nota:3000,revision:5000,aprob:3000,fein:2000},canal:{Lead:1,Particular:0,Jorge:3,Inmob:0},mon:{ene:22000,feb:7500,mar:10000,abr:0,may:9000,jun:3000},totOps:4,totHon:13000,facMes:3000}
+};
+const QUARTERS=[{l:'Q2 25',v:26900},{l:'Q3 25',v:63965},{l:'Q4 25',v:95600},{l:'Q1 26',v:119800},{l:'Q2 26',v:88000,curr:true}];
+const SEMESTERS=[{l:'S1 25',v:77200},{l:'S2 25',v:159565},{l:'S1 26',v:207800,curr:true}];
+const OPS={
+ Flor:[{n:'Hernán y Michelle',h:6000,st:'Revisión',adv:2},{n:'Iván Monteagudo Canet',h:6000,st:'Revisión',adv:2},{n:'Marco Palomar Schopf',h:5000,st:'Revisión',adv:2},{n:'Francisco Estellés Gallego',h:5000,st:'Revisión',adv:2},{n:'María Amparo García Vicent',h:3900,st:'Revisión',adv:2},{n:'Jesús Heredia Castro',h:2500,st:'Revisión',adv:2}],
+ Facundo:[{n:'Jade Longelin',h:5000,st:'FEIN',adv:4},{n:'Óscar Villar Vila',h:5000,st:'FEIN',adv:4},{n:'Antonio Mónaco',h:6000,st:'Revisión',adv:2},{n:'Katia Lourdes Paredes',h:6000,st:'Revisión',adv:2},{n:'Arturo Rodríguez',h:5000,st:'Revisión',adv:2},{n:'Carlos Zomeño Canales',h:5000,st:'Revisión',adv:2}],
+ Isled:[{n:'Ricardo Alemany',h:2000,st:'Aprobado',adv:3},{n:'Yeray Outeda',h:6000,st:'Revisión',adv:2},{n:'Sergio Castellanos',h:5000,st:'Revisión',adv:2},{n:'Fernando Recio',h:5000,st:'Revisión',adv:2},{n:'Alejandro Aroca',h:5000,st:'Revisión',adv:2},{n:'María de la O Gámez Guillén',h:5000,st:'Revisión',adv:2}],
+ David:[{n:'Eduardo Gil',h:6000,st:'Revisión',adv:2},{n:'Alfonso Paredes Rivas',h:6000,st:'Revisión',adv:2},{n:'Max Castells',h:5000,st:'Revisión',adv:2},{n:'Pabellón Venezuelan Food',h:5000,st:'Revisión',adv:2},{n:'Belén Vílchez',h:5000,st:'Revisión',adv:2},{n:'Sara Pérez',h:4000,st:'Revisión',adv:2}],
+ Kelvin:[{n:'Joao Francisco Rodríguez',h:2000,st:'FEIN',adv:4},{n:'Alannah liquidez',h:3000,st:'Aprobado',adv:3},{n:'Ximo/Raúl Betoret',h:5000,st:'Revisión',adv:2},{n:'Alannah/Seamas',h:3000,st:'Nota encargo',adv:1}]
+};
+const NAVY='#162A41',C_NOTA='#E0A43B',C_REV='#162A41',C_APROB='#8FA63E',C_FEIN='#2E86AB',GREEN2='#8FA63E',TEAL='#2E86AB',AMBER='#E0A43B',RED='#c0392b';
+const eur=n=>n.toLocaleString('es-ES')+' €';
+const SN={nota:'Nota de encargo',revision:'Revisión de bancos',aprob:'Aprobados por banco',fein:'FEIN firmada'};
+const CN={Lead:'Lead Invernomics',Particular:'Particular',Jorge:'Referido Jorge',Inmob:'Referido Inmobiliaria'};
+const BONO_Q=30000,BONO_S=50000;
+let stageChart,canalChart,monthChart,cur='Todos',curP='mensual';
+
+function rec(ops,gap){const s=[...ops].sort((a,b)=>b.adv-a.adv);let acc=0,p=[];for(const o of s){if(acc>=gap)break;p.push(o);acc+=o.h;}return{p,acc};}
+
+function buildBono(a){
+ const card=document.getElementById('bonoCard');
+ if(a==='Todos'||a==='Kelvin'){card.classList.add('hidden');return;}
+ card.classList.remove('hidden');
+ const d=DATA[a];
+ const q2=d.mon.abr+d.mon.may+d.mon.jun;
+ const s1=d.mon.ene+d.mon.feb+d.mon.mar+d.mon.abr+d.mon.may+d.mon.jun;
+ const gq=Math.max(0,BONO_Q-q2), gs=Math.max(0,BONO_S-s1);
+ const pq=Math.min(100,Math.round(q2/BONO_Q*100)), ps=Math.min(100,Math.round(s1/BONO_S*100));
+ function goal(label,val,obj,pct,gap){
+  const col=gap===0?GREEN2:(pct>=70?AMBER:RED);
+  const tag=gap===0?'<span style="color:#4e6019;font-weight:700">✓ logrado</span>':('faltan <b>'+eur(gap)+'</b>');
+  return '<div class="goal"><div class="gh"><span>'+label+'</span><span><b>'+eur(val)+'</b> / '+eur(obj)+' &nbsp; '+tag+'</span></div><div class="track"><div class="fill" style="width:'+pct+'%;background:'+col+'"></div></div></div>';
+ }
+ let html='<h2>🏆 Objetivos de bono — '+a+'</h2><p class="desc">Trimestral 30.000 € (Q2: abr–jun) · Semestral 50.000 € (S1: ene–jun). Bono = 150 €/mes.</p>';
+ html+=goal('Bono trimestral Q2',q2,BONO_Q,pq,gq);
+ html+=goal('Bono semestral S1',s1,BONO_S,ps,gs);
+ // recommendation
+ let r='';
+ if(gq===0&&gs===0){ r='<div class="insight g">✅ <b>'+a+' ya tiene asegurados los dos bonos</b> de este periodo. A consolidar el siguiente trimestre con el pipeline en revisión.</div>'; }
+ else {
+  const target = gq>0 ? {name:'trimestral (cierra el 28 jun)',gap:gq} : {name:'semestral (cierra el 28 jun)',gap:gs};
+  const picks=rec(OPS[a]||[],target.gap);
+  if(picks.p.length && picks.acc>=target.gap){
+   r='<div class="insight a">🎯 <b>Para el bono '+target.name+ ' faltan '+eur(target.gap)+'.</b> Operaciones a empujar (las más maduras primero): '+picks.p.map(o=>o.n+' <span style="opacity:.7">('+o.st+', '+eur(o.h)+')</span>').join(' · ')+'. Cierran de sobra el objetivo si pagan factura antes del 28.</div>';
+  } else {
+   r='<div class="insight a">🎯 <b>Para el bono '+target.name+' faltan '+eur(target.gap)+'.</b> Su pipeline maduro actual ('+eur(picks.acc)+') no llega: hay que acelerar las operaciones en revisión y/o sumar nuevas entradas. '+(a==='David'?'Como junior, prioridad: convertir su primera operación.':'')+'</div>';
+  }
+ }
+ html+=r;
+ card.innerHTML=html;
+}
+
+function build(a){
+ const d=DATA[a];
+ const pend=d.hon.fein+d.hon.aprob, techo=d.facMes+pend;
+ document.getElementById('k_ops').textContent=d.totOps;
+ document.getElementById('k_hon').textContent=eur(d.totHon);
+ document.getElementById('k_fac').textContent=eur(d.facMes);
+ document.getElementById('k_fac_s').textContent='Proyección techo: '+eur(techo);
+ document.getElementById('em_desc').textContent=a==='Todos'?'Compromiso del cliente firmado: de Nota de encargo a FEIN firmada.':'Operaciones en marcha de '+a+'.';
+
+ if(stageChart)stageChart.destroy();
+ stageChart=new Chart(document.getElementById('stageChart'),{type:'bar',
+  data:{labels:['Nota encargo','Revisión bancos','Aprobados','FEIN firmada'],
+   datasets:[{label:'Honorarios',data:[d.hon.nota,d.hon.revision,d.hon.aprob,d.hon.fein],backgroundColor:[C_NOTA,C_REV,C_APROB,C_FEIN],borderRadius:6}]},
+  options:{indexAxis:'y',responsive:true,maintainAspectRatio:false,
+   plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>{const o=[d.ops.nota,d.ops.revision,d.ops.aprob,d.ops.fein][c.dataIndex];return eur(c.parsed.x)+' · '+o+' ops';}}}},
+   scales:{x:{ticks:{callback:v=>(v/1000)+'k'}}}}});
+ let domS='nota',domH=-1;for(const s in d.hon){if(d.hon[s]>domH){domH=d.hon[s];domS=s;}}
+ let emt='El grueso del pipeline está en <b>'+SN[domS]+'</b> ('+eur(domH)+'). ';
+ emt+= pend>0?'Tip: FEIN + aprobados suman <b>'+eur(pend)+'</b> de cobro inminente — empújalos a factura antes del cierre.':'Tip: no hay nada en FEIN ni aprobado; el foco es mover las de revisión hacia aprobación de banco.';
+ document.getElementById('em_note').innerHTML=emt;
+
+ if(canalChart)canalChart.destroy();
+ const cv=[d.canal.Lead,d.canal.Particular,d.canal.Jorge,d.canal.Inmob];
+ canalChart=new Chart(document.getElementById('canalChart'),{type:'doughnut',
+  data:{labels:['Lead Invernomics','Particular','Referido Jorge','Referido Inmob.'],datasets:[{data:cv,backgroundColor:[NAVY,TEAL,GREEN2,AMBER],borderWidth:2,borderColor:'#fff'}]},
+  options:{responsive:true,maintainAspectRatio:false,cutout:'58%',plugins:{legend:{position:'right',labels:{boxWidth:12,font:{size:11}}}}}});
+ const totC=cv.reduce((x,y)=>x+y,0);let topK='Lead',topV=-1;for(const k of ['Lead','Particular','Jorge','Inmob']){if(d.canal[k]>topV){topV=d.canal[k];topK=k;}}
+ const pct=totC?Math.round(topV/totC*100):0;
+ let cnt='<b>'+CN[topK]+'</b> es el canal principal: '+topV+' de '+totC+' ops ('+pct+'%). ';
+ cnt+= topK==='Lead'?'Tip: el lead propio es el de mayor retorno — proteger su volumen y velocidad de respuesta es prioridad.':'Tip: conviene reforzar el lead propio de Invernomics, que suele convertir mejor que los referidos.';
+ document.getElementById('canal_note').innerHTML=cnt;
+
+ buildBono(a);
+ renderFac();
+}
+
+function renderFac(){
+ const a=cur,d=DATA[a];
+ const scope=document.getElementById('fac_scope'),desc=document.getElementById('fac_desc');
+ let labels,vals,colors,ds,note='';
+ if(curP==='mensual'){
+  scope.textContent=a==='Todos'?'mensual — equipo':'mensual — '+a;
+  desc.textContent='Honorarios ganados (factura pagada) por mes contable.';
+  labels=['Ene','Feb','Mar','Abr','May','Jun'];
+  vals=[d.mon.ene,d.mon.feb,d.mon.mar,d.mon.abr,d.mon.may,d.mon.jun];
+  ds=[{label:'Honorarios',data:vals,backgroundColor:NAVY,borderRadius:6,order:2}];
+  if(a==='Todos')ds.push({label:'Objetivo',type:'line',data:[50000,50000,50000,50000,50000,50000],borderColor:RED,borderDash:[6,4],borderWidth:2,pointRadius:0,order:1});
+  const avg=Math.round(vals.reduce((x,y)=>x+y,0)/6),pend=d.hon.fein+d.hon.aprob,techo=d.facMes+pend;
+  note='Media 6 meses: <b>'+eur(avg)+'</b>'+(a==='Todos'?' · objetivo 50.000 €':'')+'. Junio cierra de momento en '+eur(d.facMes)+', con <b>techo '+eur(techo)+'</b> si cobran los pendientes. ';
+  note+= a==='Todos'?'Tip: el equipo va por debajo del objetivo; la palanca es convertir el pipeline en revisión y la entrada de David.':'';
+ } else if(curP==='trimestral'){
+  scope.textContent='trimestral — equipo';
+  desc.textContent='Honorarios del equipo por trimestre contable (último en curso).';
+  labels=QUARTERS.map(q=>q.l);vals=QUARTERS.map(q=>q.v);
+  ds=[{label:'Honorarios',data:vals,backgroundColor:QUARTERS.map(q=>q.curr?GREEN2:NAVY),borderRadius:6}];
+  const q2=88000,q1=119800,q2p=26900;
+  note='Q2 2026 lleva <b>'+eur(q2)+'</b> (en curso, junio sin cerrar) frente a <b>'+eur(q1)+'</b> del Q1 2026. Pero vs el mismo trimestre del año pasado (Q2 2025: '+eur(q2p)+') es más de <b>3×</b>. Tip: Q1 fue excepcional; el ritmo sigue muy por encima de 2025.';
+ } else {
+  scope.textContent='semestral — equipo';
+  desc.textContent='Honorarios del equipo por semestre contable (último en curso).';
+  labels=SEMESTERS.map(s=>s.l);vals=SEMESTERS.map(s=>s.v);
+  ds=[{label:'Honorarios',data:vals,backgroundColor:SEMESTERS.map(s=>s.curr?GREEN2:NAVY),borderRadius:6}];
+  note='S1 2026 acumula <b>'+eur(207800)+'</b>, ya por encima del semestre anterior (S2 2025: '+eur(159565)+', <b>+30%</b>) y muy por encima del S1 2025 ('+eur(77200)+', <b>+169%</b>). Tip: crecimiento sólido y sostenido semestre a semestre.';
+ }
+ if(monthChart)monthChart.destroy();
+ monthChart=new Chart(document.getElementById('monthChart'),{type:'bar',
+  data:{labels,datasets:ds},
+  options:{responsive:true,maintainAspectRatio:false,
+   plugins:{legend:{display:curP==='mensual'&&a==='Todos',labels:{boxWidth:12,font:{size:11}}},tooltip:{callbacks:{label:c=>c.dataset.label+': '+eur(c.parsed.y)}}},
+   scales:{y:{ticks:{callback:v=>(v/1000)+'k'}}}}});
+ document.getElementById('fac_note').innerHTML=note;
+}
+
+function sel(el){document.querySelectorAll('.chip').forEach(c=>c.classList.remove('active'));el.classList.add('active');cur=el.dataset.a;build(cur);}
+function selP(el){document.querySelectorAll('.pill').forEach(c=>c.classList.remove('active'));el.classList.add('active');curP=el.dataset.p;renderFac();}
+build('Todos');
+</script>
+</body></html>
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      
