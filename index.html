@@ -84,7 +84,7 @@ td.r,th.r{text-align:right}
 <div class="kpi"><div class="v" id="k_ops" style="color:var(--green2)">–</div><div class="l">Operaciones EN MARCHA</div><div class="s" id="k_ops_s" style="color:#9aa3b0;font-weight:400">comprometidas</div></div>
 <div class="kpi"><div class="v" id="k_hon" style="color:var(--navy)">–</div><div class="l">Honorarios en marcha</div><div class="s" style="color:#9aa3b0;font-weight:400">pipeline comprometido</div></div>
 <div class="kpi"><div class="v" id="k_fac" style="color:var(--navy)">–</div><div class="l">Facturado este mes (jun)</div><div class="s" id="k_fac_s"></div></div>
-<div class="kpi"><div class="v" id="k_conv" style="color:#c0392b">50%</div><div class="l">Conversión encargo→ganada</div><div class="s" style="color:#9aa3b0;font-weight:400">global · 6 meses</div></div>
+<div class="kpi"><div class="v" id="k_conv" style="color:#c0392b">49%</div><div class="l">Conversión encargo→ganada</div><div class="s" style="color:#9aa3b0;font-weight:400">global · 6 meses</div></div>
 </div>
 
 <div class="card hidden" id="bonoCard"></div>
@@ -119,13 +119,13 @@ td.r,th.r{text-align:right}
 <div class="row">
 <div class="card">
 <h2>🎯 Tasas de conversión <span style="font-weight:400;color:var(--muted);font-size:12px">(global · 6 meses)</span></h2>
-<p class="desc">52 ganadas · 645 perdidas en el periodo.</p>
+<p class="desc">51 ganadas · 645 perdidas en el periodo.</p>
 <div class="bars2">
-<div class="bar2"><span>Lead → compromiso (encargo)</span><b>15,1%</b></div>
+<div class="bar2"><span>Lead → compromiso (encargo)</span><b>14,9%</b></div>
 <div class="track"><div class="fill" style="width:15%;background:var(--amber)"></div></div>
 <div style="font-size:11px;color:var(--muted);margin:3px 0 12px">~1 de cada 7 leads llega a comprometerse.</div>
-<div class="bar2"><span>Compromiso → ganada (factura)</span><b>49,5%</b></div>
-<div class="track"><div class="fill" style="width:50%;background:var(--green2)"></div></div>
+<div class="bar2"><span>Compromiso → ganada (factura)</span><b>49,0%</b></div>
+<div class="track"><div class="fill" style="width:49%;background:var(--green2)"></div></div>
 <div style="font-size:11px;color:var(--muted);margin-top:3px">Caídas tras compromiso: 22 denegadas por banco · 31 firmaron con su banco.</div>
 </div>
 <div class="insight g">💡 <b>El cuello está en captar, no en ejecutar.</b> Comprometidos cierran al 50%, pero solo el 15% de leads se comprometen. Tip: reforzar la calificación en la primera llamada y el seguimiento del embudo previo rinde más que perseguir operaciones ya firmadas.</div>
@@ -149,15 +149,15 @@ td.r,th.r{text-align:right}
 
 <script>
 const DATA={
- Todos:{ops:{nota:12,revision:33,aprob:7,fein:0},hon:{nota:46000,revision:149400,aprob:27500,fein:0},canal:{Lead:34,Particular:10,Jorge:8,Inmob:0},mon:{ene:60000,feb:17300,mar:42500,abr:14300,may:31700,jun:57000},totOps:52,totHon:222900,facMes:57000},
+ Todos:{ops:{nota:12,revision:33,aprob:7,fein:0},hon:{nota:46000,revision:149400,aprob:27500,fein:0},canal:{Lead:34,Particular:10,Jorge:8,Inmob:0},mon:{ene:60000,feb:17300,mar:42500,abr:14300,may:31700,jun:52000},totOps:52,totHon:222900,facMes:52000},
  Flor:{ops:{nota:1,revision:6,aprob:0,fein:0},hon:{nota:3000,revision:27400,aprob:0,fein:0},canal:{Lead:4,Particular:2,Jorge:1,Inmob:0},mon:{ene:11500,feb:9800,mar:0,abr:8300,may:18200,jun:10500},totOps:7,totHon:30400,facMes:10500},
  Facundo:{ops:{nota:1,revision:5,aprob:4,fein:0},hon:{nota:5000,revision:25500,aprob:17500,fein:0},canal:{Lead:8,Particular:1,Jorge:1,Inmob:0},mon:{ene:15500,feb:0,mar:14500,abr:2500,may:4500,jun:20000},totOps:10,totHon:48000,facMes:20000},
  Isled:{ops:{nota:0,revision:10,aprob:2,fein:0},hon:{nota:0,revision:48000,aprob:7000,fein:0},canal:{Lead:7,Particular:5,Jorge:0,Inmob:0},mon:{ene:11000,feb:0,mar:18000,abr:3500,may:0,jun:18500},totOps:12,totHon:55000,facMes:18500},
  David:{ops:{nota:10,revision:10,aprob:0,fein:0},hon:{nota:38000,revision:39500,aprob:0,fein:0},canal:{Lead:15,Particular:2,Jorge:3,Inmob:0},mon:{ene:0,feb:0,mar:0,abr:0,may:0,jun:0},totOps:20,totHon:77500,facMes:0},
- Kelvin:{ops:{nota:0,revision:2,aprob:1,fein:0},hon:{nota:0,revision:9000,aprob:3000,fein:0},canal:{Lead:0,Particular:0,Jorge:3,Inmob:0},mon:{ene:22000,feb:7500,mar:10000,abr:0,may:9000,jun:8000},totOps:3,totHon:12000,facMes:8000}
+ Kelvin:{ops:{nota:0,revision:2,aprob:1,fein:0},hon:{nota:0,revision:9000,aprob:3000,fein:0},canal:{Lead:0,Particular:0,Jorge:3,Inmob:0},mon:{ene:22000,feb:7500,mar:10000,abr:0,may:9000,jun:3000},totOps:3,totHon:12000,facMes:3000}
 };
-const QUARTERS=[{l:'Q2 25',v:26900},{l:'Q3 25',v:63965},{l:'Q4 25',v:95600},{l:'Q1 26',v:119800},{l:'Q2 26',v:103000,curr:true}];
-const SEMESTERS=[{l:'S1 25',v:77200},{l:'S2 25',v:159565},{l:'S1 26',v:222800,curr:true}];
+const QUARTERS=[{l:'Q2 25',v:26900},{l:'Q3 25',v:63965},{l:'Q4 25',v:95600},{l:'Q1 26',v:119800},{l:'Q2 26',v:98000,curr:true}];
+const SEMESTERS=[{l:'S1 25',v:77200},{l:'S2 25',v:159565},{l:'S1 26',v:217800,curr:true}];
 const OPS={
  Flor:[{n:'Hernán y Michelle',h:6000,st:'Revisión',adv:2},{n:'Iván Monteagudo Canet',h:6000,st:'Revisión',adv:2},{n:'Marco Palomar Schopf',h:5000,st:'Revisión',adv:2},{n:'Juan Gallardo Herrera',h:4000,st:'Revisión',adv:2},{n:'María Amparo García Vicent',h:3900,st:'Revisión',adv:2},{n:'Jesús Heredia Castro (reforma)',h:2500,st:'Revisión',adv:2}],
  Facundo:[{n:'Mark Ruiz',h:5000,st:'Aprobado',adv:3},{n:'Jaime Gascó',h:4500,st:'Aprobado',adv:3},{n:'Juan M. Guerrero (Hijo Ángela) 90%',h:4000,st:'Aprobado',adv:3},{n:'Juan M. Guerrero (Hijo Ángela) 100%',h:4000,st:'Aprobado',adv:3},{n:'Antonio Mónaco',h:6000,st:'Revisión',adv:2},{n:'Arturo Rodríguez',h:5000,st:'Revisión',adv:2}],
@@ -262,14 +262,14 @@ function renderFac(){
   desc.textContent='Honorarios del equipo por trimestre contable (último en curso).';
   labels=QUARTERS.map(q=>q.l);vals=QUARTERS.map(q=>q.v);
   ds=[{label:'Honorarios',data:vals,backgroundColor:QUARTERS.map(q=>q.curr?GREEN2:NAVY),borderRadius:6}];
-  const q2=103000,q1=119800,q2p=26900;
-  note='Q2 2026 lleva <b>'+eur(q2)+'</b> (en curso, junio sin cerrar) frente a <b>'+eur(q1)+'</b> del Q1 2026. Pero vs el mismo trimestre del año pasado (Q2 2025: '+eur(q2p)+') es más de <b>3,8×</b>. Tip: Q1 fue excepcional; el ritmo sigue muy por encima de 2025.';
+  const q2=98000,q1=119800,q2p=26900;
+  note='Q2 2026 lleva <b>'+eur(q2)+'</b> (en curso, junio sin cerrar) frente a <b>'+eur(q1)+'</b> del Q1 2026. Pero vs el mismo trimestre del año pasado (Q2 2025: '+eur(q2p)+') es más de <b>3,6×</b>. Tip: Q1 fue excepcional; el ritmo sigue muy por encima de 2025.';
  } else {
   scope.textContent='semestral — equipo';
   desc.textContent='Honorarios del equipo por semestre contable (último en curso).';
   labels=SEMESTERS.map(s=>s.l);vals=SEMESTERS.map(s=>s.v);
   ds=[{label:'Honorarios',data:vals,backgroundColor:SEMESTERS.map(s=>s.curr?GREEN2:NAVY),borderRadius:6}];
-  note='S1 2026 acumula <b>'+eur(222800)+'</b>, ya por encima del semestre anterior (S2 2025: '+eur(159565)+', <b>+40%</b>) y muy por encima del S1 2025 ('+eur(77200)+', <b>+189%</b>). Tip: crecimiento sólido y sostenido semestre a semestre.';
+  note='S1 2026 acumula <b>'+eur(217800)+'</b>, ya por encima del semestre anterior (S2 2025: '+eur(159565)+', <b>+37%</b>) y muy por encima del S1 2025 ('+eur(77200)+', <b>+182%</b>). Tip: crecimiento sólido y sostenido semestre a semestre.';
  }
  if(monthChart)monthChart.destroy();
  monthChart=new Chart(document.getElementById('monthChart'),{type:'bar',
@@ -284,4 +284,4 @@ function sel(el){document.querySelectorAll('.chip').forEach(c=>c.classList.remov
 function selP(el){document.querySelectorAll('.pill').forEach(c=>c.classList.remove('active'));el.classList.add('active');curP=el.dataset.p;renderFac();}
 build('Todos');
 </script>
-<
+</b
