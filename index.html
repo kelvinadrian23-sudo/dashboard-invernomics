@@ -119,12 +119,12 @@ td.r,th.r{text-align:right}
 <div class="row">
 <div class="card">
 <h2>🎯 Tasas de conversión <span style="font-weight:400;color:var(--muted);font-size:12px">(global · 6 meses)</span></h2>
-<p class="desc">37 ganadas · 580 perdidas en el periodo.</p>
+<p class="desc">38 ganadas · 580 perdidas en el periodo.</p>
 <div class="bars2">
-<div class="bar2"><span>Lead → compromiso (encargo)</span><b>14,7%</b></div>
+<div class="bar2"><span>Lead → compromiso (encargo)</span><b>14,9%</b></div>
 <div class="track"><div class="fill" style="width:15%;background:var(--amber)"></div></div>
 <div style="font-size:11px;color:var(--muted);margin:3px 0 12px">~1 de cada 7 leads llega a comprometerse.</div>
-<div class="bar2"><span>Compromiso → ganada (factura)</span><b>40,7%</b></div>
+<div class="bar2"><span>Compromiso → ganada (factura)</span><b>41,3%</b></div>
 <div class="track"><div class="fill" style="width:41%;background:var(--green2)"></div></div>
 <div style="font-size:11px;color:var(--muted);margin-top:3px">Caídas tras compromiso: 23 denegadas por banco · 31 firmaron con su banco.</div>
 </div>
@@ -149,15 +149,15 @@ td.r,th.r{text-align:right}
 
 <script>
 const DATA={
- Todos:{ops:{nota:11,revision:32,aprob:6,fein:3},hon:{nota:43000,revision:144400,aprob:24000,fein:13000},canal:{Lead:34,Particular:9,Jorge:9,Inmob:0},mon:{ene:17300,feb:42500,mar:14300,abr:26700,may:51500,jun:4500},totOps:52,totHon:224400,facMes:4500},
+ Todos:{ops:{nota:11,revision:32,aprob:6,fein:3},hon:{nota:43000,revision:144400,aprob:24000,fein:13000},canal:{Lead:34,Particular:9,Jorge:9,Inmob:0},mon:{ene:17300,feb:42500,mar:14300,abr:26700,may:51500,jun:8500},totOps:52,totHon:224400,facMes:8500},
  Flor:{ops:{nota:0,revision:7,aprob:0,fein:0},hon:{nota:0,revision:30400,aprob:0,fein:0},canal:{Lead:4,Particular:2,Jorge:1,Inmob:0},mon:{ene:9800,feb:0,mar:8300,abr:18200,may:10500,jun:0},totOps:7,totHon:30400,facMes:0},
  Facundo:{ops:{nota:1,revision:5,aprob:3,fein:1},hon:{nota:5000,revision:25500,aprob:13000,fein:6000},canal:{Lead:8,Particular:1,Jorge:1,Inmob:0},mon:{ene:0,feb:14500,mar:2500,abr:4500,may:19500,jun:4500},totOps:10,totHon:49500,facMes:4500},
  Isled:{ops:{nota:0,revision:10,aprob:0,fein:2},hon:{nota:0,revision:48000,aprob:0,fein:7000},canal:{Lead:7,Particular:4,Jorge:1,Inmob:0},mon:{ene:0,feb:18000,mar:3500,abr:0,may:18500,jun:0},totOps:12,totHon:55000,facMes:0},
  David:{ops:{nota:10,revision:8,aprob:2,fein:0},hon:{nota:38000,revision:31500,aprob:8000,fein:0},canal:{Lead:15,Particular:2,Jorge:3,Inmob:0},mon:{ene:0,feb:0,mar:0,abr:0,may:0,jun:0},totOps:20,totHon:77500,facMes:0},
- Kelvin:{ops:{nota:0,revision:2,aprob:1,fein:0},hon:{nota:0,revision:9000,aprob:3000,fein:0},canal:{Lead:0,Particular:0,Jorge:3,Inmob:0},mon:{ene:7500,feb:10000,mar:0,abr:4000,may:3000,jun:0},totOps:3,totHon:12000,facMes:0}
+ Kelvin:{ops:{nota:0,revision:2,aprob:1,fein:0},hon:{nota:0,revision:9000,aprob:3000,fein:0},canal:{Lead:0,Particular:0,Jorge:3,Inmob:0},mon:{ene:7500,feb:10000,mar:0,abr:4000,may:3000,jun:4000},totOps:3,totHon:12000,facMes:4000}
 };
-const QUARTERS=[{l:'Q3 25',v:63965},{l:'Q4 25',v:95600},{l:'Q1 26',v:119800},{l:'Q2 26',v:92500},{l:'Q3 26',v:4500,curr:true}];
-const SEMESTERS=[{l:'S2 25',v:159565},{l:'S1 26',v:212300},{l:'S2 26',v:4500,curr:true}];
+const QUARTERS=[{l:'Q3 25',v:63965},{l:'Q4 25',v:95600},{l:'Q1 26',v:119800},{l:'Q2 26',v:92500},{l:'Q3 26',v:8500,curr:true}];
+const SEMESTERS=[{l:'S2 25',v:159565},{l:'S1 26',v:212300},{l:'S2 26',v:8500,curr:true}];
 const OPS={
  Flor:[{n:'Hernán y Michelle',h:6000,st:'Revisión',adv:2},{n:'Iván Monteagudo Canet',h:6000,st:'Revisión',adv:2},{n:'Marco Palomar Schopf',h:5000,st:'Revisión',adv:2},{n:'Juan Gallardo Herrera',h:4000,st:'Revisión',adv:2},{n:'María Amparo García Vicent',h:3900,st:'Revisión',adv:2},{n:'José Marfil/Invernomics',h:3000,st:'Revisión',adv:2}],
  Facundo:[{n:'Jaime Gascó',h:6000,st:'FEIN',adv:4},{n:'Mark Ruiz',h:5000,st:'Aprobado',adv:3},{n:'Juan M. Guerrero (Hijo Ángela) 95%',h:4000,st:'Aprobado',adv:3},{n:'Juan M. Guerrero (Hijo Ángela) 100%',h:4000,st:'Aprobado',adv:3},{n:'Antonio Mónaco',h:6000,st:'Revisión',adv:2},{n:'Arturo Rodríguez',h:5000,st:'Revisión',adv:2}],
@@ -263,13 +263,13 @@ function renderFac(){
   labels=QUARTERS.map(q=>q.l);vals=QUARTERS.map(q=>q.v);
   ds=[{label:'Honorarios',data:vals,backgroundColor:QUARTERS.map(q=>q.curr?GREEN2:NAVY),borderRadius:6}];
   const q2=92500,q1=119800,q3ly=63965;
-  note='Q2 2026 cerró completo en <b>'+eur(q2)+'</b>, ligeramente por debajo del Q1 2026 (<b>'+eur(q1)+'</b>) pero muy por encima del mismo trimestre del año pasado (Q3 2025: <b>'+eur(q3ly)+'</b>). El nuevo trimestre, Q3 2026, acaba de arrancar (<b>4.500 €</b>, primer día). Tip: seguir de cerca la conversión del pipeline en revisión para arrancar fuerte.';
+  note='Q2 2026 cerró completo en <b>'+eur(q2)+'</b>, ligeramente por debajo del Q1 2026 (<b>'+eur(q1)+'</b>) pero muy por encima del mismo trimestre del año pasado (Q3 2025: <b>'+eur(q3ly)+'</b>). El nuevo trimestre, Q3 2026, acaba de arrancar (<b>8.500 €</b>, primer día). Tip: seguir de cerca la conversión del pipeline en revisión para arrancar fuerte.';
  } else {
   scope.textContent='semestral — equipo';
   desc.textContent='Honorarios del equipo por semestre contable (último en curso).';
   labels=SEMESTERS.map(s=>s.l);vals=SEMESTERS.map(s=>s.v);
   ds=[{label:'Honorarios',data:vals,backgroundColor:SEMESTERS.map(s=>s.curr?GREEN2:NAVY),borderRadius:6}];
-  note='S1 2026 cerró en <b>'+eur(212300)+'</b>, un <b>+33%</b> por encima del semestre anterior (S2 2025: '+eur(159565)+') y muy por encima del S1 2025 ('+eur(77200)+', <b>+175%</b>). El nuevo semestre, S2 2026, acaba de comenzar (<b>4.500 €</b>, primer día). Tip: crecimiento sólido y sostenido semestre a semestre.';
+  note='S1 2026 cerró en <b>'+eur(212300)+'</b>, un <b>+33%</b> por encima del semestre anterior (S2 2025: '+eur(159565)+') y muy por encima del S1 2025 ('+eur(77200)+', <b>+175%</b>). El nuevo semestre, S2 2026, acaba de comenzar (<b>8.500 €</b>, primer día). Tip: crecimiento sólido y sostenido semestre a semestre.';
  }
  if(monthChart)monthChart.destroy();
  monthChart=new Chart(document.getElementById('monthChart'),{type:'bar',
@@ -284,4 +284,4 @@ function sel(el){document.querySelectorAll('.chip').forEach(c=>c.classList.remov
 function selP(el){document.querySelectorAll('.pill').forEach(c=>c.classList.remove('active'));el.classList.add('active');curP=el.dataset.p;renderFac();}
 build('Todos');
 </script>
-</body></html>
+</body></
