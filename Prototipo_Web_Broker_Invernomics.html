@@ -1,0 +1,465 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Prototipo · Broker Invernomics</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;500;600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#08131F; --bg-soft:#0B1826; --card:#111C2A; --panel:#0D1F33; --line:rgba(255,255,255,.08);
+  --lime:#C8D96A; --lime-h:#B9C965; --lime-ink:#08131F; --lime-soft:rgba(200,217,106,.13);
+  --text:#EAF0F5; --muted:#8A97A8; --muted2:#B3BECC;
+  --shadow:0 24px 60px rgba(0,0,0,.5); --r:14px;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:'Inter',system-ui,sans-serif;background:var(--bg);color:var(--text);line-height:1.6;overflow-x:hidden;-webkit-font-smoothing:antialiased}
+h1,h2,h3,.dsp{font-family:'Sora',sans-serif;letter-spacing:-.02em;line-height:1.08}
+a{color:inherit;text-decoration:none}
+.lime{color:var(--lime)}
+.container{max-width:1140px;margin:0 auto;padding:0 26px}
+.topline{height:3px;background:linear-gradient(90deg,var(--lime),transparent 60%)}
+.btn{display:inline-flex;align-items:center;gap:9px;font-weight:700;font-family:'Sora';font-size:15px;border:none;border-radius:12px;padding:14px 24px;cursor:pointer;transition:transform .18s ease,background .18s,box-shadow .18s}
+.btn svg{width:18px;height:18px}
+.btn-lime{background:var(--lime);color:var(--lime-ink)}
+.btn-lime:hover{background:var(--lime-h);transform:translateY(-2px);box-shadow:0 10px 26px rgba(200,217,106,.28)}
+.btn-ghost{background:transparent;color:var(--text);border:1px solid var(--line)}
+.btn-ghost:hover{border-color:var(--lime);color:var(--lime)}
+.btn-wa{background:#25D366;color:#04321a}
+.btn-wa:hover{background:#20c35d;transform:translateY(-2px)}
+.pill{display:inline-flex;align-items:center;gap:9px;background:var(--lime-soft);color:var(--lime);border:1px solid rgba(200,217,106,.3);border-radius:999px;padding:7px 16px;font-size:12.5px;font-weight:600;letter-spacing:.04em}
+.pill .blink{width:7px;height:7px;border-radius:50%;background:var(--lime);animation:blink 2s infinite}
+@keyframes blink{0%{box-shadow:0 0 0 0 rgba(200,217,106,.55)}70%{box-shadow:0 0 0 7px rgba(200,217,106,0)}100%{box-shadow:0 0 0 0 rgba(200,217,106,0)}}
+.eyebrow{color:var(--lime);font-weight:700;font-size:12.5px;letter-spacing:.16em;text-transform:uppercase}
+.muted{color:var(--muted)}
+.ico{width:46px;height:46px;border-radius:12px;background:var(--lime-soft);display:grid;place-items:center}
+.ico svg{width:23px;height:23px;stroke:var(--lime);fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.logobox{background:#fff;border-radius:10px;padding:6px 11px;display:inline-flex;align-items:center}
+.logobox img{height:30px;display:block}
+
+.reveal{opacity:0;transform:translateY(22px);transition:opacity .7s ease,transform .7s cubic-bezier(.2,.7,.2,1)}
+.reveal.in{opacity:1;transform:none}
+
+.proto{background:#0C1A29;border-bottom:1px solid var(--line);font-size:12px;color:var(--muted);text-align:center;padding:7px 16px}
+.proto b{color:var(--lime)}
+
+header.nav{position:sticky;top:0;z-index:40;background:rgba(8,19,31,.8);backdrop-filter:blur(14px);border-bottom:1px solid var(--line)}
+.nav-in{display:flex;align-items:center;justify-content:space-between;height:74px}
+.nav-links{display:flex;gap:30px;font-size:14.5px;color:var(--muted)}
+.nav-links a{position:relative;padding:4px 0}
+.nav-links a::after{content:"";position:absolute;left:0;bottom:-2px;width:0;height:2px;background:var(--lime);transition:width .22s}
+.nav-links a:hover{color:var(--text)}
+.nav-links a:hover::after{width:100%}
+@media(max-width:880px){.nav-links{display:none}}
+
+.hero{position:relative;padding:82px 0 60px;overflow:hidden}
+.hero::before{content:"";position:absolute;width:780px;height:640px;right:-140px;top:-120px;background:radial-gradient(closest-side,rgba(200,217,106,.16),transparent 70%);pointer-events:none}
+.hero-grid{display:grid;grid-template-columns:1.12fr .88fr;gap:52px;align-items:center;position:relative}
+@media(max-width:920px){.hero-grid{grid-template-columns:1fr;gap:36px}}
+.hero h1{font-size:53px;font-weight:800;margin:20px 0}
+@media(max-width:920px){.hero h1{font-size:39px}}
+.hero .sub{font-size:18px;color:var(--muted2);max-width:520px;margin-bottom:28px}
+.hero-cta{display:flex;gap:14px;flex-wrap:wrap;align-items:center}
+.micro{font-size:13px;color:var(--muted);margin-top:16px;display:flex;gap:14px;flex-wrap:wrap}
+.micro b{color:var(--text)}
+.micro span{display:inline-flex;align-items:center;gap:6px}
+.micro svg{width:15px;height:15px;stroke:var(--lime);fill:none;stroke-width:2}
+
+.hcard{position:relative;background:linear-gradient(180deg,#132234,#0D1826);border:1px solid var(--line);border-radius:20px;padding:26px;box-shadow:var(--shadow)}
+.hcard h4{font-family:'Sora';font-size:16px;margin-bottom:4px}
+.hcard .lead{font-size:13px;color:var(--muted);margin-bottom:14px}
+.gauge{width:168px;height:168px;margin:2px auto 12px;position:relative}
+.gauge .lab{position:absolute;inset:0;display:grid;place-content:center;text-align:center}
+.gauge .lab b{font-family:'Sora';font-size:34px;font-weight:700;color:var(--text);display:block;line-height:1}
+.gauge .lab span{font-size:11px;color:var(--muted)}
+.hstats{display:flex;gap:10px;margin-top:8px}
+.hstats .s{flex:1;background:#0C1826;border:1px solid var(--line);border-radius:12px;padding:13px 8px;text-align:center;transition:.18s}
+.hstats .s:hover{border-color:rgba(200,217,106,.5);transform:translateY(-3px)}
+.hstats .s b{font-family:'Sora';font-size:21px;color:var(--lime);display:block;line-height:1.1}
+.hstats .s span{font-size:11px;color:var(--muted)}
+
+.trust{background:#0A1622;border-bottom:1px solid var(--line)}
+.trust-in{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;padding:30px 0}
+@media(max-width:820px){.trust-in{grid-template-columns:repeat(2,1fr)}}
+.tstat{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:20px 16px;text-align:center;transition:transform .2s,border-color .2s,background .2s}
+.tstat:hover{transform:translateY(-5px);border-color:rgba(200,217,106,.55);background:#13202f}
+.tstat .n{font-family:'Sora';font-size:30px;font-weight:800;color:var(--text)}
+.tstat:hover .n{color:var(--lime)}
+.tstat .c{font-size:12.5px;color:var(--muted);margin-top:3px}
+.tstat .bar{height:3px;width:34px;background:var(--lime);border-radius:2px;margin:10px auto 0;opacity:.35;transition:.25s}
+.tstat:hover .bar{opacity:1;width:56px}
+.tstat.bde{border-color:rgba(200,217,106,.5);background:linear-gradient(180deg,#14261c,#111f1a)}
+.tstat.bde .shield{width:34px;height:34px;margin:0 auto 6px;color:var(--lime)}
+.tstat.bde .shield svg{width:34px;height:34px;stroke:var(--lime);fill:none;stroke-width:1.7}
+.tstat.bde .n{font-size:17px;color:var(--lime)}
+
+section.block{padding:78px 0}
+.h2{font-size:36px;font-weight:800;margin:10px 0 8px}
+@media(max-width:920px){.h2{font-size:29px}}
+.lead-txt{color:var(--muted2);max-width:660px;font-size:16px}
+
+/* banks section */
+.banksec{background:linear-gradient(180deg,#0B1826,#08131F)}
+.bank-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin:30px 0 8px}
+@media(max-width:820px){.bank-stats{grid-template-columns:1fr}}
+.bstat{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:22px}
+.bstat b{font-family:'Sora';font-size:32px;color:var(--lime);display:block;line-height:1}
+.bstat span{font-size:13.5px;color:var(--muted2)}
+.quote{border-left:3px solid var(--lime);padding:6px 0 6px 18px;margin:26px 0;font-family:'Sora';font-size:18px;color:#D2DBE6;max-width:820px;font-style:italic}
+.quote small{display:block;margin-top:8px;font-style:normal;font-size:12px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
+.marquee{position:relative;overflow:hidden;margin-top:26px;-webkit-mask-image:linear-gradient(90deg,transparent,#000 7%,#000 93%,transparent);mask-image:linear-gradient(90deg,transparent,#000 7%,#000 93%,transparent)}
+.marquee.r2{margin-top:14px}
+.mtrack{display:flex;gap:14px;width:max-content;animation:scrollx 40s linear infinite}
+.mtrack.rev{animation-direction:reverse}
+.marquee:hover .mtrack{animation-play-state:paused}
+@keyframes scrollx{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+.bchip{flex:0 0 auto;min-width:184px;background:var(--card);border:1px solid var(--line);border-radius:12px;padding:16px 22px;text-align:center;font-family:'Sora';font-weight:600;font-size:14px;color:#D2DBE6;transition:border-color .18s,color .18s}
+.bchip:hover{border-color:var(--lime);color:var(--lime)}
+
+.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin-top:40px}
+@media(max-width:820px){.grid3{grid-template-columns:1fr}}
+.svc{background:linear-gradient(180deg,#122032,#0E1826);border:1px solid var(--line);border-radius:16px;padding:26px;transition:transform .2s,border-color .2s}
+.svc:hover{border-color:rgba(200,217,106,.45);transform:translateY(-5px)}
+.svc .ico{margin-bottom:15px}
+.svc h3{font-size:17.5px;margin-bottom:8px}
+.svc p{font-size:14px;color:var(--muted)}
+
+.diff{background:linear-gradient(180deg,#0B1725,#08131F)}
+.diff-quote{font-family:'Sora';font-size:27px;font-weight:700;line-height:1.35;max-width:860px;margin-top:14px}
+
+.thead{display:flex;align-items:center;gap:14px;margin-top:10px;flex-wrap:wrap}
+.gpill{display:inline-flex;align-items:center;gap:8px;background:var(--card);border:1px solid var(--line);border-radius:999px;padding:8px 15px;font-size:13px;color:var(--muted2)}
+.gpill b{color:var(--text)}
+.gpill .st{color:var(--lime);letter-spacing:1px}
+.tgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin-top:30px}
+@media(max-width:920px){.tgrid{grid-template-columns:1fr}}
+.tcard{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:24px;transition:.2s}
+.tcard:hover{border-color:rgba(200,217,106,.3);transform:translateY(-3px)}
+.tcard .stars{color:var(--lime);font-size:14px;letter-spacing:2px;margin-bottom:10px}
+.tcard p{font-size:14px;color:#D2DBE6}
+.tcard .who{margin-top:14px;display:flex;align-items:center;gap:11px}
+.tcard .av{width:38px;height:38px;border-radius:50%;background:var(--lime-soft);color:var(--lime);display:grid;place-items:center;font-family:'Sora';font-weight:700;font-size:14px}
+.tcard .who b{font-size:14px;display:block}
+.tcard .who span{font-size:12px;color:var(--muted)}
+
+.band{position:relative;overflow:hidden;background:linear-gradient(120deg,#16241a,#132133);border:1px solid rgba(200,217,106,.3);border-radius:22px;padding:48px;text-align:center}
+.band::before{content:"";position:absolute;width:420px;height:420px;left:-120px;bottom:-220px;background:radial-gradient(closest-side,rgba(200,217,106,.18),transparent 70%)}
+.band h2{font-size:31px;font-weight:800;margin-bottom:10px;position:relative}
+.band p{color:var(--muted2);margin-bottom:24px;position:relative}
+.band .altlink{position:relative;display:inline-block;margin-top:18px;font-size:14px;color:var(--muted2)}
+.band .altlink a{color:var(--lime);border-bottom:1px solid rgba(200,217,106,.4)}
+
+footer{border-top:1px solid var(--line);padding:38px 0;color:var(--muted);font-size:13px;background:var(--bg-soft)}
+.foot-in{display:flex;justify-content:space-between;flex-wrap:wrap;gap:18px;align-items:center}
+.foot-in .bde{color:var(--muted2)}
+.foot-in .bde b{color:var(--lime)}
+
+.tag{position:fixed;right:14px;bottom:14px;z-index:60;background:var(--card);border:1px solid var(--line);border-radius:10px;padding:8px 13px;font-size:11.5px;color:var(--muted)}
+.tag b{color:var(--lime)}
+
+.overlay{position:fixed;inset:0;background:rgba(4,9,15,.74);backdrop-filter:blur(7px);display:none;align-items:center;justify-content:center;z-index:100;padding:20px}
+.overlay.open{display:flex}
+.modal{width:100%;max-width:560px;background:linear-gradient(180deg,#132234,#0C1725);border:1px solid var(--line);border-radius:22px;box-shadow:var(--shadow);overflow:hidden}
+.m-top{display:flex;align-items:center;justify-content:space-between;padding:16px 22px;border-bottom:1px solid var(--line)}
+.close{background:transparent;border:none;color:var(--muted);font-size:24px;cursor:pointer;line-height:1}
+.close:hover{color:var(--text)}
+.progress{height:5px;background:#0A1420}
+.bar{height:100%;width:0;background:var(--lime);transition:width .4s ease}
+.m-body{padding:30px 26px 26px;min-height:230px}
+.qcount{font-size:12px;letter-spacing:.13em;text-transform:uppercase;color:var(--lime);font-weight:700;margin-bottom:8px}
+.q{font-family:'Sora';font-size:22px;font-weight:700;margin-bottom:18px;line-height:1.25}
+.opts{display:grid;gap:10px}
+.opt{display:flex;align-items:center;gap:12px;background:#0D1826;border:1px solid var(--line);border-radius:12px;padding:15px 16px;cursor:pointer;font-size:15px;transition:.15s;text-align:left;color:var(--text)}
+.opt:hover{border-color:var(--lime);background:#132236}
+.opt .dot{width:19px;height:19px;border-radius:50%;border:2px solid #3a4658;flex-shrink:0;display:grid;place-items:center;transition:.15s}
+.opt .dot svg{width:11px;height:11px;stroke:var(--lime-ink);stroke-width:3;fill:none;opacity:0}
+.opt.sel{border-color:var(--lime);background:var(--lime-soft)}
+.opt.sel .dot{border-color:var(--lime);background:var(--lime)}
+.opt.sel .dot svg{opacity:1}
+.m-nav{display:flex;justify-content:space-between;align-items:center;margin-top:22px;gap:12px}
+.link-back{background:none;border:none;color:var(--muted);cursor:pointer;font-size:14px}
+.link-back:hover{color:var(--text)}
+.pbar{display:flex;gap:5px;align-items:center}
+.pseg{width:20px;height:5px;border-radius:3px;background:#26364a;transition:background .35s}
+.pseg.on{background:var(--lime)}
+.field{margin-bottom:14px}
+.field label{display:block;font-size:13px;color:var(--muted);margin-bottom:6px}
+.field input{width:100%;background:#0D1826;border:1px solid var(--line);border-radius:11px;padding:13px 14px;color:var(--text);font-size:15px;font-family:inherit}
+.field input:focus{outline:none;border-color:var(--lime)}
+.gate-note{font-size:12.5px;color:var(--muted);margin-top:8px;display:flex;align-items:center;gap:7px}
+.result{text-align:center}
+.badge-ok{display:inline-flex;gap:8px;align-items:center;background:var(--lime-soft);color:var(--lime);border-radius:999px;padding:7px 16px;font-weight:600;font-size:13px;margin-bottom:14px}
+.result h3{font-size:22px;margin-bottom:8px}
+.result p{color:var(--muted2);font-size:14.5px;margin-bottom:8px}
+.callout{background:#0D1826;border:1px solid rgba(200,217,106,.3);border-radius:12px;padding:14px 16px;margin:14px 0;font-size:14px;color:var(--text);display:flex;gap:10px;align-items:center;text-align:left}
+.callout svg{width:22px;height:22px;stroke:var(--lime);fill:none;stroke-width:1.8;flex-shrink:0}
+</style>
+</head>
+<body>
+<div class="topline"></div>
+
+<header class="nav">
+  <div class="container nav-in">
+    <span class="logobox"><img src="logo_broker.png" alt="Invernomics Broker"></span>
+    <nav class="nav-links">
+      <a href="#servicios">Servicios</a>
+      <a href="#bancos">Bancos</a>
+      <a href="#opiniones">Opiniones</a>
+      <a href="#contacto">Contacto</a>
+    </nav>
+    <button class="btn btn-lime" onclick="openSim()">Simular gratis <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button>
+  </div>
+</header>
+
+<section class="hero">
+  <div class="container hero-grid">
+    <div class="reveal">
+      <span class="pill"><span class="blink"></span> Broker hipotecario · Valencia</span>
+      <h1>¿Necesitas una hipoteca y <span class="lime">no la consigues en tu banco?</span></h1>
+      <p class="sub">Estructuramos lo que tu banco rechaza: financiación hasta el 100%, inversores, no residentes y operaciones complejas. Conseguimos el sí cuando otros te dicen que no.</p>
+      <div class="hero-cta">
+        <button class="btn btn-lime" onclick="openSim()">Calcula tu viabilidad en 2 min</button>
+        <a class="btn btn-ghost" href="#servicios">Ver qué hacemos</a>
+      </div>
+      <div class="micro">
+        <span><svg viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></svg> Gratis y sin compromiso</span>
+        <span><svg viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></svg> Respuesta en <b>&nbsp;24h</b></span>
+        <span><svg viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></svg> Solo pagas si firmas</span>
+      </div>
+    </div>
+    <div class="hcard reveal">
+      <h4>Tu viabilidad hipotecaria</h4>
+      <p class="lead">Un test rápido y un especialista te dice si es viable.</p>
+      <div class="gauge" id="heroGauge"></div>
+      <div class="hstats">
+        <div class="s"><b data-count data-target="100" data-suffix="%">0%</b><span>financiación posible</span></div>
+        <div class="s"><b data-count data-target="92" data-suffix="%">0%</b><span>aprobación bancaria</span></div>
+        <div class="s"><b data-count data-target="20" data-prefix="+">0</b><span>bancos</span></div>
+      </div>
+      <button class="btn btn-lime" style="width:100%;justify-content:center;margin-top:16px" onclick="openSim()">Empezar mi simulación</button>
+    </div>
+  </div>
+</section>
+
+<!-- TRUST COUNTERS -->
+<div class="trust"><div class="container trust-in">
+  <div class="tstat reveal"><div class="n" data-count data-target="120" data-prefix="+">+0</div><div class="c">operaciones cerradas</div><div class="bar"></div></div>
+  <div class="tstat reveal"><div class="n" data-count data-target="30" data-prefix="+" data-suffix="M€">+0</div><div class="c">volumen gestionado</div><div class="bar"></div></div>
+  <div class="tstat reveal"><div class="n" data-count data-target="92" data-suffix="%">0%</div><div class="c">aprobación bancaria</div><div class="bar"></div></div>
+  <div class="tstat bde reveal"><div class="shield"><svg viewBox="0 0 24 24"><path d="M12 3l7 3v5c0 5-3 8-7 10-4-2-7-5-7-10V6z"/><path d="M9 12l2 2 4-4"/></svg></div><div class="n">Banco de España</div><div class="c">Intermediario de crédito · nº E331</div><div class="bar"></div></div>
+</div></div>
+
+<!-- BANCOS -->
+<section class="block banksec" id="bancos">
+  <div class="container">
+    <div class="reveal">
+      <span class="eyebrow">Entidades colaboradoras</span>
+      <h2 class="h2">Trabajamos con <span class="lime">+20 entidades bancarias</span></h2>
+      <p class="lead-txt">Cada perfil encaja mejor en un banco distinto. No enviamos tu expediente a uno solo: lo presentamos en paralelo a las entidades adecuadas y elegimos la mejor oferta. Eso es lo que diferencia un 92% de aprobación de un 50%.</p>
+    </div>
+    <div class="bank-stats reveal">
+      <div class="bstat"><b data-count data-target="92" data-suffix="%">0%</b><span>de operaciones aprobadas sobre el total presentado</span></div>
+      <div class="bstat"><b>3–5</b><span>bancos consultados en paralelo por operación</span></div>
+      <div class="bstat"><b data-count data-target="45" data-suffix=" días">0</b><span>plazo medio hasta la oferta vinculante</span></div>
+    </div>
+    <div class="quote reveal">“Un comparador te da una lista. Nosotros te damos un sí. Estudiamos tu caso, elegimos el banco adecuado y peleamos tu hipoteca hasta la firma.”<small>— Equipo Broker Invernomics</small></div>
+    <div class="marquee reveal">
+      <div class="mtrack">
+        <div class="bchip">CaixaBank</div><div class="bchip">Santander</div><div class="bchip">Banco Sabadell</div><div class="bchip">Bankinter</div><div class="bchip">Globalcaja</div><div class="bchip">Eurocaja Rural</div><div class="bchip">Caixa Popular</div><div class="bchip">ING</div><div class="bchip">Unicaja</div><div class="bchip">Ibercaja</div>
+        <div class="bchip">CaixaBank</div><div class="bchip">Santander</div><div class="bchip">Banco Sabadell</div><div class="bchip">Bankinter</div><div class="bchip">Globalcaja</div><div class="bchip">Eurocaja Rural</div><div class="bchip">Caixa Popular</div><div class="bchip">ING</div><div class="bchip">Unicaja</div><div class="bchip">Ibercaja</div>
+      </div>
+    </div>
+    <div class="marquee r2 reveal">
+      <div class="mtrack rev">
+        <div class="bchip">Abanca</div><div class="bchip">Cajamar</div><div class="bchip">Banco Pichincha</div><div class="bchip">Mediolanum</div><div class="bchip">MyInvestor</div><div class="bchip">UCI</div><div class="bchip">Deutsche Bank</div><div class="bchip">C.R. Granada</div><div class="bchip">Kutxabank</div><div class="bchip">Caja Ingenieros</div>
+        <div class="bchip">Abanca</div><div class="bchip">Cajamar</div><div class="bchip">Banco Pichincha</div><div class="bchip">Mediolanum</div><div class="bchip">MyInvestor</div><div class="bchip">UCI</div><div class="bchip">Deutsche Bank</div><div class="bchip">C.R. Granada</div><div class="bchip">Kutxabank</div><div class="bchip">Caja Ingenieros</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SERVICIOS -->
+<section class="block" id="servicios">
+  <div class="container">
+    <div class="reveal">
+      <span class="eyebrow">Lo que resolvemos</span>
+      <h2 class="h2">Soluciones para cada tipo de operación</h2>
+      <p class="lead-txt">Desde tu primera vivienda hasta la operación más compleja que otros no saben estructurar.</p>
+    </div>
+    <div class="grid3">
+      <div class="svc reveal"><div class="ico"><svg viewBox="0 0 24 24"><path d="M3 11l9-7 9 7"/><path d="M5 10v10h14V10"/><path d="M9 20v-6h6v6"/></svg></div><h3>Financia el 100%</h3><p>La máxima financiación para tu vivienda. Ideal para jóvenes y primera compra.</p></div>
+      <div class="svc reveal"><div class="ico"><svg viewBox="0 0 24 24"><path d="M3 7l6 6 4-4 8 8"/><path d="M21 17v-6h-6"/></svg></div><h3>Mejora tu hipoteca</h3><p>Renegociamos tus condiciones actuales. A largo plazo son miles de euros.</p></div>
+      <div class="svc reveal"><div class="ico"><svg viewBox="0 0 24 24"><path d="M4 21V5l8-3v19"/><path d="M12 21V9l6 2v10"/><path d="M2 21h20"/></svg></div><h3>Inmuebles alquilados</h3><p>¿Tienes un inmueble alquilado revalorizado? Lo hacemos aún más rentable.</p></div>
+      <div class="svc reveal"><div class="ico"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c3 3 3 15 0 18M12 3c-3 3-3 15 0 18"/></svg></div><h3>No residentes</h3><p>¿Vives fuera de España y quieres invertir? Nos encargamos de todo el trámite.</p></div>
+      <div class="svc reveal"><div class="ico"><svg viewBox="0 0 24 24"><path d="M3 3v18h18"/><path d="M7 15l4-4 3 3 5-6"/></svg></div><h3>Inversores</h3><p>La financiación es clave para el retorno de tu capital. Las mejores opciones.</p></div>
+      <div class="svc reveal"><div class="ico"><svg viewBox="0 0 24 24"><path d="M8 3a2 2 0 0 1 2 2v1a2 2 0 0 0 4 0V5a2 2 0 0 1 2-2h3v3a2 2 0 0 1-2 2h-1a2 2 0 0 0 0 4h1a2 2 0 0 1 2 2v3h-3a2 2 0 0 1-2-2v-1a2 2 0 0 0-4 0v1a2 2 0 0 1-2 2H5v-3a2 2 0 0 1 2-2h1a2 2 0 0 0 0-4H7a2 2 0 0 1-2-2V3z"/></svg></div><h3>Operaciones complejas</h3><p>Múltiples simultáneas, reunificación, embargos, extinción de condominio…</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- POR QUE -->
+<section class="block diff" id="porque">
+  <div class="container">
+    <div class="reveal">
+      <span class="eyebrow">Nuestro ángulo</span>
+      <p class="diff-quote">Lo que tu banco te dice que <span class="lime">no</span>, nosotros lo <span class="lime">estructuramos</span>. No somos un comparador de masas: analizamos tu caso uno a uno y negociamos con el banco por ti.</p>
+    </div>
+    <div class="grid3">
+      <div class="svc reveal"><div class="ico"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="4"/><circle cx="12" cy="12" r="0.6"/></svg></div><h3>Trato personal, caso a caso</h3><p>Un asesor dedicado que estudia tu perfil y busca la mejor estructura para ti.</p></div>
+      <div class="svc reveal"><div class="ico"><svg viewBox="0 0 24 24"><path d="M13 2 4 14h7l-1 8 9-12h-7z"/></svg></div><h3>Agilidad</h3><p>Primera respuesta en 24h y acompañamiento hasta la firma en notaría.</p></div>
+      <div class="svc reveal"><div class="ico"><svg viewBox="0 0 24 24"><path d="M8 13l3 3 5-6"/><path d="M12 3l7 3v5c0 5-3 8-7 10-4-2-7-5-7-10V6z"/></svg></div><h3>Solo pagas si firmas</h3><p>Sin coste inicial. Nuestros honorarios solo si conseguimos tu hipoteca.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- OPINIONES -->
+<section class="block" id="opiniones">
+  <div class="container">
+    <div class="reveal">
+      <span class="eyebrow">Clientes reales</span>
+      <h2 class="h2">Historias que acaban en un sí</h2>
+      <div class="thead">
+        <span class="gpill"><span class="st">★★★★★</span> <b>Opiniones verificadas</b> de clientes</span>
+      </div>
+    </div>
+    <div class="tgrid">
+      <div class="tcard reveal"><div class="stars">★★★★★</div><p>“Nos ayudaron a cerrar una operación a contrarreloj después de que nuestra primera hipoteca no fuera aprobada por el banco. Consiguieron la propuesta en tiempo récord. Muy buena y confiable.”</p><div class="who"><span class="av">BP</span><div><b>Beatriz P.</b><span>Compra vivienda</span></div></div></div>
+      <div class="tcard reveal"><div class="stars">★★★★★</div><p>“Kelvin me consiguió una operación doble de 2 hipotecas simultáneas financiadas al 90% cada una, siendo autónomo y con otra hipoteca activa. 10/10 y volveré.”</p><div class="who"><span class="av">MS</span><div><b>Manel S.</b><span>Inversor · autónomo</span></div></div></div>
+      <div class="tcard reveal"><div class="stars">★★★★★</div><p>“Desde el primer contacto con Jorge, un nivel de profesionalismo excepcional. Me guió paso a paso, con transparencia total. Son simplemente excepcionales.”</p><div class="who"><span class="av">RG</span><div><b>Ricardo G.</b><span>Compra vivienda</span></div></div></div>
+      <div class="tcard reveal"><div class="stars">★★★★★</div><p>“Excelente servicio. Jorge me ayudó a conseguir una hipoteca con muy buenas condiciones, explicando todo con claridad y acompañándome en cada paso. 100% recomendado.”</p><div class="who"><span class="av">CO</span><div><b>Charo O.</b><span>Vivienda habitual</span></div></div></div>
+      <div class="tcard reveal"><div class="stars">★★★★★</div><p>“Flor ha sido una ayuda indispensable para sacar adelante la hipoteca de mi segunda residencia. Condiciones inmejorables y resolvió todos los inconvenientes. Recomendado 100%.”</p><div class="who"><span class="av">AR</span><div><b>Alejandro R.</b><span>Segunda residencia</span></div></div></div>
+      <div class="tcard reveal"><div class="stars">★★★★★</div><p>“Varias gestiones ya realizadas con Jorge y muy contento. Intenta buscarte la mejor opción sin duda y con diferencia. Seguro que vuelvo a contactar. 10 de 10.”</p><div class="who"><span class="av">SV</span><div><b>Sergio V.</b><span>Cliente recurrente</span></div></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA BAND -->
+<section class="block" id="contacto" style="padding-top:0">
+  <div class="container">
+    <div class="band reveal">
+      <h2>Descubre si tu hipoteca es viable — <span class="lime">gratis</span></h2>
+      <p>Responde 6 preguntas rápidas y un especialista te dice cómo estructurarla.</p>
+      <button class="btn btn-lime" onclick="openSim()" style="font-size:16px;padding:16px 30px">Empezar mi simulación →</button>
+      <div class="altlink">¿Prefieres calcularlo tú mismo? Usa nuestra <a href="https://invernomics.com/recursos/" target="_blank">calculadora de capacidad de endeudamiento</a>.</div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="container foot-in">
+    <span class="logobox"><img src="logo_broker.png" alt="Invernomics Broker"></span>
+    <div class="bde">Registrado en el <b>Banco de España</b> · Intermediario de Crédito Inmobiliario nº <b>E331</b></div>
+    <div>© 2026 Invernomics Real Estate · Broker inmobiliario en Valencia</div>
+  </div>
+</footer>
+
+<div class="tag">Prototipo <b>v3</b> · funcional</div>
+
+<!-- SIMULADOR -->
+<div class="overlay" id="overlay">
+  <div class="modal">
+    <div class="m-top">
+      <span class="logobox"><img src="logo_broker.png" alt="Invernomics Broker"></span>
+      <button class="close" onclick="closeSim()">×</button>
+    </div>
+    <div class="progress"><div class="bar" id="bar"></div></div>
+    <div class="m-body" id="mbody"></div>
+  </div>
+</div>
+
+<script>
+const io=new IntersectionObserver((es)=>{es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target);}})},{threshold:.14});
+document.querySelectorAll('.reveal').forEach(el=>io.observe(el));
+
+function countUp(el){
+  const target=parseFloat(el.dataset.target), dec=parseInt(el.dataset.decimals||0);
+  const pre=el.dataset.prefix||'', suf=el.dataset.suffix||'', dur=1500, t0=performance.now();
+  function tick(now){let p=Math.min((now-t0)/dur,1);p=1-Math.pow(1-p,3);
+    const v=target*p;
+    const txt=dec?v.toFixed(dec).replace('.',','):Math.round(v).toLocaleString('es-ES');
+    el.textContent=pre+txt+suf;
+    if(p<1)requestAnimationFrame(tick);}
+  requestAnimationFrame(tick);
+}
+const cio=new IntersectionObserver((es)=>{es.forEach(e=>{if(e.isIntersecting){countUp(e.target);cio.unobserve(e.target);}})},{threshold:.5});
+document.querySelectorAll('[data-count]').forEach(el=>cio.observe(el));
+
+(function(){
+  const el=document.getElementById('heroGauge');
+  el.innerHTML=`<svg viewBox="0 0 120 120" width="168" height="168"><circle cx="60" cy="60" r="52" fill="none" stroke="#1d2c3e" stroke-width="12"/><circle id="gArc" cx="60" cy="60" r="52" fill="none" stroke="#C8D96A" stroke-width="12" stroke-linecap="round" stroke-dasharray="327" stroke-dashoffset="327" transform="rotate(-90 60 60)" style="transition:stroke-dashoffset 1.6s cubic-bezier(.2,.7,.2,1)"/></svg><div class="lab"><b>75%</b><span>viabilidad media</span></div>`;
+  const arc=document.getElementById('gArc');
+  const go=new IntersectionObserver((es)=>{es.forEach(e=>{if(e.isIntersecting){arc.style.strokeDashoffset=327-(327*.75);go.disconnect();}})},{threshold:.4});
+  go.observe(el);
+})();
+
+const questions=[
+  {q:"¿Para qué necesitas la financiación?",opts:["Comprar mi vivienda habitual","Invertir en un inmueble","Mejorar mi hipoteca actual","Una operación compleja"]},
+  {q:"¿Tienes algún inmueble ya pagado (libre de cargas)?",opts:["Sí","No"]},
+  {q:"¿Cuál es tu situación laboral?",opts:["Contrato indefinido","Autónomo","Contrato temporal","Otra"]},
+  {q:"¿Cuáles son tus ingresos netos mensuales?",opts:["Menos de 1.500 €","1.500 € – 3.000 €","3.000 € – 5.000 €","Más de 5.000 €"]},
+  {q:"¿Cuánto pagas de deuda mensual en total?",opts:["Nada o casi nada","Menos de 500 €","500 € – 1.000 €","Más de 1.000 €"]},
+  {q:"¿De qué fondos dispones para la compra?",opts:["Menos del 10%","Entre el 10% y el 20%","Más del 20%","Aún no lo sé"]}
+];
+const answers=new Array(questions.length).fill(null);
+let step=0;
+const GATE=questions.length, RESULT=questions.length+1;
+const bar=document.getElementById('bar'), body=document.getElementById('mbody');
+const CHK='<svg viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></svg>';
+const WA='https://wa.me/34641027843';
+
+function setBar(){const total=questions.length+1;bar.style.width=(Math.min(step,total)/total*100)+"%";}
+function render(){setBar();if(step<questions.length)renderQuestion();else if(step===GATE)renderGate();else renderResult();}
+function renderQuestion(){
+  const item=questions[step];
+  body.innerHTML=`<div class="step">
+    <div class="qcount">Pregunta ${step+1} de ${questions.length}</div>
+    <div class="q">${item.q}</div>
+    <div class="opts">${item.opts.map((o,i)=>`<button class="opt ${answers[step]===i?'sel':''}" onclick="choose(${i})"><span class="dot">${CHK}</span><span>${o}</span></button>`).join('')}</div>
+    <div class="m-nav">${step>0?'<button class="link-back" onclick="back()">← Atrás</button>':'<span></span>'}<div class="pbar">${questions.map((_,i)=>`<span class="pseg ${i<=step?'on':''}"></span>`).join('')}</div></div>
+  </div>`;
+}
+function choose(i){answers[step]=i;const b=body.querySelectorAll('.opt');b.forEach(x=>x.classList.remove('sel'));b[i].classList.add('sel');setTimeout(()=>{step++;render();},240);}
+function back(){if(step>0){step--;render();}}
+function renderGate(){
+  body.innerHTML=`<div class="step">
+    <div class="qcount">Último paso</div>
+    <div class="q">Tu resultado está listo</div>
+    <p class="muted" style="margin-top:-8px;margin-bottom:18px;font-size:14.5px">Déjanos tus datos y un especialista revisa tu caso y te contacta. Con esto ya tienes tu análisis en marcha.</p>
+    <div class="field"><label>Nombre</label><input id="f_name" placeholder="Tu nombre"></div>
+    <div class="field"><label>Email</label><input id="f_email" type="email" placeholder="tucorreo@email.com"></div>
+    <div class="field"><label>Teléfono / WhatsApp</label><input id="f_phone" placeholder="+34 ..."></div>
+    <button class="btn btn-lime" style="width:100%;justify-content:center;margin-top:6px" onclick="submitGate()">Ver mi resultado →</button>
+    <div class="gate-note">🔒 Gratis y sin compromiso. No compartimos tus datos.</div>
+    <div class="m-nav"><button class="link-back" onclick="back()">← Atrás</button><span></span></div>
+  </div>`;
+}
+function submitGate(){
+  const n=f_name.value.trim(),e=f_email.value.trim(),p=f_phone.value.trim();
+  if(!n||!e||!p){if(!document.getElementById('gerr')){const d=document.createElement('div');d.id='gerr';d.className='gate-note';d.style.color='#ff8a80';d.textContent='⚠ Completa los 3 campos para ver tu resultado.';document.querySelector('.gate-note').after(d);}return;}
+  step=RESULT;render();
+}
+function computeScore(){let s=55;const a=answers;if(a[1]===0)s+=10;if(a[2]===0)s+=12;else if(a[2]===1)s+=4;if(a[3]>=2)s+=12;else if(a[3]===1)s+=5;if(a[4]===0)s+=10;else if(a[4]===1)s+=4;else if(a[4]===3)s-=6;if(a[5]>=1&&a[5]<=2)s+=8;return Math.max(35,Math.min(96,s));}
+function renderResult(){
+  const sc=computeScore(),off=327-(327*sc/100);
+  body.innerHTML=`<div class="step result">
+    <div class="badge-ok"><svg viewBox="0 0 24 24" style="width:15px;height:15px;stroke:#C8D96A;fill:none;stroke-width:2.5;stroke-linecap:round;stroke-linejoin:round"><path d="M20 6 9 17l-5-5"/></svg> Análisis en marcha</div>
+    <div class="gauge" style="margin:2px auto 12px"><svg viewBox="0 0 120 120" width="168" height="168"><circle cx="60" cy="60" r="52" fill="none" stroke="#1d2c3e" stroke-width="12"/><circle id="rArc" cx="60" cy="60" r="52" fill="none" stroke="#C8D96A" stroke-width="12" stroke-linecap="round" stroke-dasharray="327" stroke-dashoffset="327" transform="rotate(-90 60 60)" style="transition:stroke-dashoffset 1.3s cubic-bezier(.2,.7,.2,1)"/></svg><div class="lab"><b class="lime">${sc}%</b><span>viabilidad estimada</span></div></div>
+    <h3>${sc>=70?'Tu operación tiene muy buena pinta':sc>=55?'Tu operación es trabajable':'Tu operación necesita estrategia'}</h3>
+    <p>${sc>=70?'Con tu perfil hay varias vías de financiación abiertas.':'No es un "no". Es exactamente el tipo de caso que sabemos estructurar cuando el banco duda.'}</p>
+    <div class="callout"><svg viewBox="0 0 24 24"><path d="M3 5h18v14H3z"/><path d="M3 7l9 6 9-6"/></svg><div><b>Un especialista ya tiene tu caso.</b> Te llamará o te escribirá por WhatsApp en menos de 24h. No tienes que hacer nada más.</div></div>
+    <button class="btn btn-wa" style="width:100%;justify-content:center;margin-top:6px" onclick="window.open('${WA}','_blank')">Adelántate: escríbenos por WhatsApp</button>
+    <button class="link-back" style="margin-top:14px" onclick="closeSim()">Cerrar</button>
+  </div>`;
+  setTimeout(()=>{const r=document.getElementById('rArc');if(r)r.style.strokeDashoffset=off;},60);
+  bar.style.width="100%";
+}
+function openSim(){step=0;answers.fill(null);render();document.getElementById('overlay').classList.add('open');document.body.style.overflow='hidden';}
+function closeSim(){document.getElementById('overlay').classList.remove('open');document.body.style.overflow='';}
+document.getElementById('overlay').addEventListener('click',e=>{if(e.target.id==='overlay')closeSim();});
+document.addEventListener('keydown',e=>{if(e.key==='Escape')closeSim();});
+</script>
+</body>
+</html>
