@@ -260,11 +260,11 @@ slides.push(`
 <div class="slide">
   ${head('La foto del trimestre','Facturación equipo — todos incluidos')}
   <div class="grid">
-    <div class="card"><div class="lab">Facturación equipo Q2</div><div class="val">90.000<span style="font-size:1.6vw"> €</span></div><div class="delta muted">Q1: 122.300 € · 21 ops (Q1: 29)</div></div>
-    <div class="card good"><div class="lab">Ticket medio</div><div class="val big-lime">4.286<span style="font-size:1.6vw"> €</span></div><div class="delta up">▲ vs Q1 (4.217 €)</div></div>
+    <div class="card"><div class="lab">Facturación equipo Q2</div><div class="val">92.500<span style="font-size:1.6vw"> €</span></div><div class="delta muted">Q1: 119.800 € · 22 ops (Q1: 28)</div></div>
+    <div class="card"><div class="lab">Ticket medio</div><div class="val">4.205<span style="font-size:1.6vw"> €</span></div><div class="delta muted">vs Q1 (4.279 €) · plano</div></div>
     <div class="card good"><div class="lab">Pipeline inminente Q3</div><div class="val big-lime">181.400<span style="font-size:1.6vw"> €</span></div><div class="delta up">▲ récord · 41 operaciones a punto</div></div>
   </div>
-  <div class="note key"><b>Lectura honesta:</b> facturamos menos que en Q1, pero cerramos operaciones de <b>mayor valor medio</b> y entramos en Q3 con el <b>pipeline más alto del año</b>. Parte de los cierres de Q2 se ha desplazado al Q3 — el número baja, pero la cartera por delante nunca ha sido tan grande.</div>
+  <div class="note key"><b>Lectura honesta:</b> facturamos algo menos que en Q1 (92.500 vs 119.800 €) y el ticket medio quedó prácticamente plano, pero entramos en Q3 con el <b>pipeline más alto del año</b>. Parte de los cierres de Q2 se ha desplazado al Q3 — el número baja, pero la cartera por delante nunca ha sido tan grande.</div>
   ${foot('2')}
 </div>`);
 
@@ -289,16 +289,16 @@ slides.push(`
   <div class="two">
     <div>
       <div class="grid" style="flex-direction:column">
-        <div class="card"><div class="lab">Ticket medio actual (Q2, todos)</div><div class="val">4.286 €</div><div class="delta muted">Q1: 4.217 € · prácticamente plano</div></div>
+        <div class="card"><div class="lab">Ticket medio actual (Q2, todos)</div><div class="val">4.205 €</div><div class="delta muted">Q1: 4.279 € · prácticamente plano</div></div>
         <div class="card good"><div class="lab">Objetivo de equipo</div><div class="val big-lime">5.000 €</div><div class="delta up">por operación cerrada</div></div>
       </div>
     </div>
     <div>
       <div class="note key"><b>El impacto en un año:</b> en el primer semestre cerramos <b>50 operaciones</b> (~100 al año):<br>
-      · Con ticket medio de 4.286 €: <b>≈ 430.000 €/año</b><br>
+      · Con ticket medio de 4.205 €: <b>≈ 420.000 €/año</b><br>
       · Con ticket medio de 5.000 €: <b>≈ 500.000 €/año</b><br>
-      <b>+70.000 €/año — sin cerrar ni una operación más.</b> Solo subiendo unos 700 € el valor medio de cada expediente.</div>
-      <div class="note warn"><b>A vigilar:</b> cerramos menos operaciones que en Q1 (21 vs 29); parte se ha desplazado a Q3 por timing — el pipeline cargado lo confirma.</div>
+      <b>+80.000 €/año — sin cerrar ni una operación más.</b> Solo subiendo unos 800 € el valor medio de cada expediente.</div>
+      <div class="note warn"><b>A vigilar:</b> cerramos menos operaciones que en Q1 (22 vs 28); parte se ha desplazado a Q3 por timing — el pipeline cargado lo confirma.</div>
     </div>
   </div>
   ${foot('4')}
@@ -404,7 +404,7 @@ slides.push(`
   <div class="grid">
     <div class="card good"><div class="lab">Objetivo facturación equipo</div><div class="val big-lime">&gt; 130.000 €</div><div class="delta up">Flor + Facundo + Isled + David + Kelvin</div></div>
     <div class="card"><div class="lab">Palanca 1</div><div class="val" style="font-size:2vw">Convertir<br>el pipeline</div><div class="delta muted">181.400 € inminentes</div></div>
-    <div class="card"><div class="lab">Palanca 2</div><div class="val" style="font-size:2vw">Ticket medio<br>hacia 5.000 €</div><div class="delta muted">hoy en 4.286 €</div></div>
+    <div class="card"><div class="lab">Palanca 2</div><div class="val" style="font-size:2vw">Ticket medio<br>hacia 5.000 €</div><div class="delta muted">hoy en 4.205 €</div></div>
   </div>
   <div class="note key"><b>Compromiso de equipo:</b> ¿lo vemos alcanzable? ¿lo subimos, lo ajustamos? Salgamos con un número que todos firmemos.</div>
   ${foot('9')}
@@ -473,12 +473,12 @@ const votes=[0,0,0];
 function vote(el){const opts=[...document.querySelectorAll('#poll1 .opt')];const i=opts.indexOf(el);votes[i]++;const tot=votes.reduce((a,b)=>a+b,0);opts.forEach((o,j)=>{const pc=Math.round(votes[j]/tot*100);o.querySelector('.fillp').style.width=pc+'%';o.querySelector('.pc').textContent=pc+'%';});}
 let curFv='trimestral';
 const FACT={
- mensual:{bars:[['Ene',60000,'q1'],['Feb',17300,'q1'],['Mar',45000,'q1'],['Abr',11800,'q2'],['May',26700,'q2'],['Jun',51500,'q2']],
+ mensual:{bars:[['Ene',60000,'q1'],['Feb',17300,'q1'],['Mar',42500,'q1'],['Abr',14300,'q2'],['May',26700,'q2'],['Jun',51500,'q2']],
   note:`<b>Facturación mensual del equipo · 2026.</b> Enero (60.000 €) y junio (51.500 €) los más fuertes; febrero y abril, los más flojos. Azul = meses del Q1, verde = meses del Q2. La estacionalidad se nota: hay que empujar los meses valle.`},
- trimestral:{bars:[['Q1 2026 · 29 ops',122300,'q1'],['Q2 2026 · 21 ops',90000,'q2']],
-  note:`<b>El equipo al completo</b> (Flor, Facundo, Isled, David y Kelvin): 122.300 € → 90.000 €. Menos operaciones cerradas, pero de mayor ticket medio y con un pipeline récord — buena parte de los cierres de Q2 caen ya en el Q3.`},
- semestral:{bars:[['S2 2025',154565,'q1'],['S1 2026',212300,'q1'],['S2 2026 · en curso',8500,'q2']],
-  note:`<b>S1 2026 cerró en 212.300 €:</b> +37% sobre el S2 2025 (154.565 €) y +168% sobre el S1 2025 (79.200 €). El S2 2026 acaba de arrancar (8.500 € los primeros días). Crecimiento sólido, semestre a semestre.`}
+ trimestral:{bars:[['Q1 2026 · 28 ops',119800,'q1'],['Q2 2026 · 22 ops',92500,'q2']],
+  note:`<b>El equipo al completo</b> (Flor, Facundo, Isled, David y Kelvin): 119.800 € → 92.500 €. Menos operaciones cerradas pero con un pipeline récord — buena parte de los cierres de Q2 caen ya en el Q3.`},
+ semestral:{bars:[['S2 2025',159565,'q1'],['S1 2026',212300,'q1'],['S2 2026 · en curso',8500,'q2']],
+  note:`<b>S1 2026 cerró en 212.300 €:</b> +33% sobre el S2 2025 (159.565 €) y +175% sobre el S1 2025 (77.200 €). El S2 2026 acaba de arrancar (8.500 € los primeros días). Crecimiento sólido, semestre a semestre.`}
 };
 function eur(n){return String(n).replace(/\B(?=(\d{3})+(?!\d))/g,'.')+' €';}
 function renderFact(view){
