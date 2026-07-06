@@ -179,23 +179,24 @@ function buildBono(a){
  if(a==='Todos'||a==='Kelvin'){card.classList.add('hidden');return;}
  card.classList.remove('hidden');
  const d=DATA[a];
- const q2=d.mon.abr+d.mon.may+d.mon.jun;
- const s1=d.mon.ene+d.mon.feb+d.mon.mar+d.mon.abr+d.mon.may+d.mon.jun;
- const gq=Math.max(0,BONO_Q-q2), gs=Math.max(0,BONO_S-s1);
- const pq=Math.min(100,Math.round(q2/BONO_Q*100)), ps=Math.min(100,Math.round(s1/BONO_S*100));
+ // Periodo vigente: Q3 (jul–sep) y S2 (jul–dic). De los 6 meses de DATA.mon (feb–jul) solo julio (mon.jun) cae en el periodo actual.
+ const q3=d.mon.jun;
+ const s2=d.mon.jun;
+ const gq=Math.max(0,BONO_Q-q3), gs=Math.max(0,BONO_S-s2);
+ const pq=Math.min(100,Math.round(q3/BONO_Q*100)), ps=Math.min(100,Math.round(s2/BONO_S*100));
  function goal(label,val,obj,pct,gap){
   const col=gap===0?GREEN2:(pct>=70?AMBER:RED);
   const tag=gap===0?'<span style="color:#4e6019;font-weight:700">✓ logrado</span>':('faltan <b>'+eur(gap)+'</b>');
   return '<div class="goal"><div class="gh"><span>'+label+'</span><span><b>'+eur(val)+'</b> / '+eur(obj)+' &nbsp; '+tag+'</span></div><div class="track"><div class="fill" style="width:'+pct+'%;background:'+col+'"></div></div></div>';
  }
- let html='<h2>🏆 Objetivos de bono — '+a+'</h2><p class="desc">Trimestral 30.000 € (Q2: abr–jun) · Semestral 50.000 € (S1: ene–jun). Bono = 150 €/mes.</p>';
- html+=goal('Bono trimestral Q2',q2,BONO_Q,pq,gq);
- html+=goal('Bono semestral S1',s1,BONO_S,ps,gs);
+ let html='<h2>🏆 Objetivos de bono — '+a+'</h2><p class="desc">Trimestral 30.000 € (Q3: jul–sep) · Semestral 50.000 € (S2: jul–dic). Bono = 150 €/mes.</p>';
+ html+=goal('Bono trimestral Q3',q3,BONO_Q,pq,gq);
+ html+=goal('Bono semestral S2',s2,BONO_S,ps,gs);
  // recommendation
  let r='';
  if(gq===0&&gs===0){ r='<div class="insight g">✅ <b>'+a+' ya tiene asegurados los dos bonos</b> de este periodo. A consolidar el siguiente trimestre con el pipeline en revisión.</div>'; }
  else {
-  const target = gq>0 ? {name:'trimestral (cierra el 28 jun)',gap:gq} : {name:'semestral (cierra el 28 jun)',gap:gs};
+  const target = gq>0 ? {name:'trimestral (cierra el 28 sep)',gap:gq} : {name:'semestral (cierra el 28 dic)',gap:gs};
   const picks=rec(OPS[a]||[],target.gap);
   if(picks.p.length && picks.acc>=target.gap){
    r='<div class="insight a">🎯 <b>Para el bono '+target.name+ ' faltan '+eur(target.gap)+'.</b> Operaciones a empujar (las más maduras primero): '+picks.p.map(o=>o.n+' <span style="opacity:.7">('+o.st+', '+eur(o.h)+')</span>').join(' · ')+'. Cierran de sobra el objetivo si pagan factura antes del 28.</div>';
@@ -281,5 +282,4 @@ function renderFac(){
 }
 
 function sel(el){document.querySelectorAll('.chip').forEach(c=>c.classList.remove('active'));el.classList.add('active');cur=el.dataset.a;build(cur);}
-function selP(el){document.querySelectorAll('.pill').forEach(c=>c.classList.remove('active'));el.classList.add('active');curP=el.dataset.p;renderFac();}
-build('Todos')
+function selP(el){document.querySelectorAll('.pill').forEach(c=>c.classList.remove('active'));el.
