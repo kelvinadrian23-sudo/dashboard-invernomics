@@ -1,19 +1,12 @@
-<!DOCTYPE html><script type="application/json" id="cowork-artifact-meta">
-{
-  "name": "Dashboard Empresa Invernomics",
-  "schemaVersion": 1,
-  "description": "Dashboard general de Invernomics con diseño de marca, filtro por asesor y gráficos interactivos (pipeline por etapa, canal, facturación vs objetivo, conversión, embudo). Datos de Bitrix24, actualizado cada mañana."
-}
-</script>
+<!DOCTYPE html>
 <html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<style>:root{color-scheme:light}</style>
 <title>Dashboard Invernomics</title>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.5.0/dist/chart.umd.js" integrity="sha384-iU8HYtnGQ8Cy4zl7gbNMOhsDTTKX02BTXptVP/vqAWIaTfM7isw76iyZCsjL2eVi" crossorigin="anonymous"></script>
 <style>
-:root{--navy:#162A41;--navy2:#0A1D27;--green:#B9C965;--green2:#8FA63E;--teal:#2E86AB;--amber:#E0A43B;--bg:#F1F3F6;--card:#fff;--ink:#1a2330;--muted:#6b7585;}
+:root{--navy:#162A41;--navy2:#0A1D27;--green:#B9C965;--green2:#8FA63E;--teal:#2E86AB;--amber:#E0A43B;--red:#c0392b;--bg:#F1F3F6;--card:#fff;--ink:#1a2330;--muted:#6b7585;}
 *{box-sizing:border-box}
 body{margin:0;background:var(--bg);font-family:'Segoe UI',Arial,Helvetica,sans-serif;color:var(--ink);}
-.wrap{max-width:960px;margin:0 auto;padding:16px;}
+.wrap{max-width:1040px;margin:0 auto;padding:16px;}
 .header{background:linear-gradient(120deg,var(--navy),var(--navy2));color:#fff;border-radius:14px;padding:16px 18px;display:flex;align-items:center;gap:14px;}
 .header img{height:52px;width:auto;background:#fff;border-radius:8px;padding:4px;}
 .header .t{flex:1}
@@ -26,6 +19,18 @@ body{margin:0;background:var(--bg);font-family:'Segoe UI',Arial,Helvetica,sans-s
 .chip{border:1.5px solid var(--navy);color:var(--navy);background:#fff;border-radius:20px;padding:6px 14px;font-size:13px;cursor:pointer;font-weight:600;transition:.15s;}
 .chip:hover{background:#eef1f6}
 .chip.active{background:var(--navy);color:#fff}
+
+.semrow{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}
+.semchip{flex:1;min-width:110px;background:var(--card);border-radius:12px;padding:10px 12px;box-shadow:0 1px 3px rgba(0,0,0,.06);cursor:pointer;border:1.5px solid transparent;display:flex;align-items:center;gap:8px;transition:.15s;}
+.semchip:hover{border-color:var(--navy)}
+.semchip.active{border-color:var(--navy);background:#eef1f6}
+.semdot{width:11px;height:11px;border-radius:50%;flex:none;box-shadow:0 0 0 3px rgba(0,0,0,.04)}
+.semdot.g{background:var(--green2)}
+.semdot.a{background:var(--amber)}
+.semdot.r{background:var(--red)}
+.semchip .nm{font-size:12.5px;font-weight:700}
+.semchip .rs{font-size:10.5px;color:var(--muted);display:block;margin-top:1px}
+
 .kpis{display:flex;flex-wrap:wrap;gap:12px;margin-top:12px}
 .kpi{flex:1;min-width:150px;background:var(--card);border-radius:12px;padding:15px;text-align:center;box-shadow:0 1px 3px rgba(0,0,0,.06)}
 .kpi .v{font-size:28px;font-weight:800;line-height:1.1}
@@ -43,32 +48,82 @@ body{margin:0;background:var(--bg);font-family:'Segoe UI',Arial,Helvetica,sans-s
 .insight.g b{color:#4e6019}
 .insight.a{background:#fff6e8;border-left-color:var(--amber);color:#8a5a00}
 .insight.a b{color:#8a5a00}
-.pills{display:flex;gap:6px;margin-bottom:10px}
+.insight.r{background:#fbeaea;border-left-color:var(--red);color:#7a2418}
+.insight.r b{color:#7a2418}
+.insight.click{cursor:pointer}
+.insight.click:hover{filter:brightness(0.97)}
+.pills{display:flex;gap:6px;margin-bottom:10px;flex-wrap:wrap}
 .pill{border:1px solid #d3dae3;background:#fff;color:var(--muted);border-radius:16px;padding:4px 12px;font-size:12px;cursor:pointer;font-weight:600}
 .pill.active{background:var(--navy);color:#fff;border-color:var(--navy)}
+.pill.sm{padding:3px 10px;font-size:11px}
 .goal{margin:10px 0}
 .goal .gh{font-size:13px;display:flex;justify-content:space-between;margin-bottom:4px}
 .track{background:#eceff3;height:13px;border-radius:7px;overflow:hidden}
 .fill{height:13px;border-radius:7px}
 .bars2{margin-top:6px}
 .bar2{font-size:13px;display:flex;justify-content:space-between;margin-bottom:3px}
-.alert{font-size:12px;color:#8a5a00;background:#fff8ec;border:1px solid #f0d9a8;border-radius:8px;padding:9px;margin-top:10px}
+.alert{font-size:12px;color:#8a5a00;background:#fff8ec;border:1px solid #f0d9a8;border-radius:8px;padding:9px;margin-top:10px;cursor:pointer}
+.alert:hover{filter:brightness(0.98)}
 .note{font-size:11px;color:#9aa3b0;margin:14px 4px}
 table{width:100%;border-collapse:collapse;font-size:13px}
 th,td{padding:6px 6px;text-align:left}
-th{color:var(--muted);font-weight:600;border-bottom:1px solid #edf0f3}
+th{color:var(--muted);font-weight:600;border-bottom:1px solid #edf0f3;cursor:pointer;user-select:none}
+th:hover{color:var(--navy)}
 td{border-bottom:1px solid #f4f6f8}
 td.r,th.r{text-align:right}
-.hidden{display:none}
+.hidden{display:none!important}
+
+.priolist{display:flex;flex-direction:column;gap:8px;margin-top:4px}
+.prio{display:flex;align-items:center;gap:10px;background:#f7f8fa;border-radius:10px;padding:9px 11px;cursor:pointer;border:1px solid #eceff3}
+.prio:hover{border-color:var(--navy)}
+.prio .rank{width:22px;height:22px;border-radius:50%;background:var(--navy);color:#fff;font-size:11px;font-weight:800;display:flex;align-items:center;justify-content:center;flex:none}
+.prio .body{flex:1;min-width:0}
+.prio .ttl{font-size:12.5px;font-weight:700;color:var(--ink);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.prio .sub{font-size:11px;color:var(--muted)}
+.prio .val{font-size:13px;font-weight:800;color:var(--navy);flex:none}
+
+.alertlist{display:flex;flex-direction:column;gap:7px}
+.alertitem{display:flex;gap:9px;align-items:flex-start;border-radius:9px;padding:8px 10px;font-size:12px;line-height:1.45;cursor:pointer;border:1px solid transparent}
+.alertitem:hover{filter:brightness(0.98)}
+.alertitem.r{background:#fbeaea;border-color:#f0c6c0;color:#7a2418}
+.alertitem.a{background:#fff6e8;border-color:#f0d9a8;color:#8a5a00}
+.alertitem.g{background:#f1f6e6;border-color:#d9e6bd;color:#4e6019}
+.alertitem b{display:block;font-size:12.5px;margin-bottom:1px}
+
+.cmptable td, .cmptable th{font-size:12.5px}
+.cmptable tr{cursor:pointer}
+.cmptable tr:hover td{background:#f7f8fa}
+.cellbar{position:relative;background:#eceff3;border-radius:5px;height:18px;min-width:70px;overflow:hidden}
+.cellbar .f{height:100%;border-radius:5px}
+.cellbar .t{position:absolute;inset:0;display:flex;align-items:center;justify-content:flex-end;padding-right:6px;font-size:11px;font-weight:700;color:var(--ink)}
+.badge{display:inline-block;font-size:10.5px;font-weight:700;padding:1px 7px;border-radius:10px}
+.badge.g{background:#e3edcf;color:#4e6019}
+.badge.a{background:#fbe9cb;color:#8a5a00}
+.badge.r{background:#f6d6d1;color:#7a2418}
+
+.modal-bg{position:fixed;inset:0;background:rgba(10,15,25,.5);display:flex;align-items:flex-start;justify-content:center;padding:5vh 16px;z-index:50;overflow:auto}
+.modal{background:#fff;border-radius:14px;max-width:640px;width:100%;padding:18px;max-height:88vh;overflow:auto;box-shadow:0 10px 40px rgba(0,0,0,.25)}
+.modal h3{margin:0 0 3px;color:var(--navy);font-size:16px}
+.modal .mdesc{font-size:12px;color:var(--muted);margin:0 0 12px}
+.modal .close{float:right;cursor:pointer;background:#eceff3;border:none;border-radius:8px;width:28px;height:28px;font-size:14px;color:var(--muted)}
+.modal .close:hover{background:#e0e4ea}
+.modal table{font-size:12.5px}
+.modal .agebad{font-size:10.5px;font-weight:700;padding:1px 6px;border-radius:8px}
+
+.histctl{display:flex;gap:5px}
+.caveat{font-size:10.5px;color:#9aa3b0;margin-top:6px;font-style:italic}
+.methodlink{font-size:10.5px;color:var(--teal);cursor:pointer;text-decoration:underline;margin-left:6px}
 </style></head>
 <body>
 <div class="wrap">
 
 <div class="header">
-<img src="data:image/png;base64,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" alt="Invernomics">
-<div class="t"><h1>Dashboard — Visión general</h1><div class="sub">Pipeline y negocio · Bitrix24</div></div>
-<div class="meta">Datos al 28/09/2026<br>Objetivo mensual <b>50.000 €</b><br>Actualización diaria</div>
+<img src="data:image/jpeg;base64,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" alt="Invernomics">
+<div class="t"><h1>Dashboard — Visión general</h1><div class="sub">Pipeline, equipo y recomendaciones · Bitrix24</div></div>
+<div class="meta" id="hdrMeta">Cargando…</div>
 </div>
+
+<div class="semrow" id="semRow"></div>
 
 <div class="filters">
 <span class="lbl">Filtrar por asesor:</span>
@@ -83,22 +138,45 @@ td.r,th.r{text-align:right}
 <div class="kpis">
 <div class="kpi"><div class="v" id="k_ops" style="color:var(--green2)">–</div><div class="l">Operaciones EN MARCHA</div><div class="s" id="k_ops_s" style="color:#9aa3b0;font-weight:400">comprometidas</div></div>
 <div class="kpi"><div class="v" id="k_hon" style="color:var(--navy)">–</div><div class="l">Honorarios en marcha</div><div class="s" style="color:#9aa3b0;font-weight:400">pipeline comprometido</div></div>
-<div class="kpi"><div class="v" id="k_fac" style="color:var(--navy)">–</div><div class="l">Facturado este mes (sep)</div><div class="s" id="k_fac_s"></div></div>
-<div class="kpi"><div class="v" id="k_conv" style="color:#c0392b">35%</div><div class="l">Conversión encargo→ganada</div><div class="s" style="color:#9aa3b0;font-weight:400">global · 6 meses</div></div>
+<div class="kpi"><div class="v" id="k_fac" style="color:var(--navy)">–</div><div class="l" id="k_fac_l">Facturado este mes</div><div class="s" id="k_fac_s"></div></div>
+<div class="kpi"><div class="v" id="k_conv" style="color:#c0392b">–</div><div class="l">Conversión encargo→ganada</div><div class="s" id="k_conv_s" style="color:#9aa3b0;font-weight:400">global · 6 meses</div></div>
 </div>
 
 <div class="card hidden" id="bonoCard"></div>
 
 <div class="row" style="margin-top:14px">
 <div class="card">
+<h2>🎯 Prioridades de la semana</h2>
+<p class="desc">Top 5 acciones con más impacto para el cierre del mes, calculadas sobre todo el equipo.</p>
+<div class="priolist" id="prioList"></div>
+</div>
+<div class="card">
+<h2>🚨 Alertas del equipo</h2>
+<p class="desc">Riesgos detectados automáticamente a partir de los KPI de cada asesor.</p>
+<div class="alertlist" id="alertList"></div>
+</div>
+</div>
+
+<div class="card">
+<h2>📊 Comparativa del equipo <span class="methodlink" onclick="toggleMethod()">¿cómo se calcula?</span></h2>
+<p class="desc">Los 5 asesores en las mismas métricas. Clic en una fila para filtrar el resto del dashboard por ese asesor; clic en un encabezado para ordenar.</p>
+<div id="methodBox" class="insight hidden" style="margin-bottom:10px"></div>
+<div style="overflow-x:auto">
+<table class="cmptable" id="cmpTable"></table>
+</div>
+<div class="caveat">Estado = semáforo combinado (conversión vs. media del equipo, operaciones estancadas y ritmo de bono). Los honorarios de Kelvin corresponden a su propia cartera, no a la del equipo que supervisa.</div>
+</div>
+
+<div class="row" style="margin-top:14px">
+<div class="card">
 <h2>🟢 Operaciones en marcha — por etapa</h2>
-<p class="desc" id="em_desc">Compromiso del cliente firmado: de Nota de encargo a FEIN firmada.</p>
+<p class="desc" id="em_desc">Compromiso del cliente firmado: de Nota de encargo a FEIN firmada. Clic en una barra para ver las operaciones.</p>
 <div class="chartbox"><canvas id="stageChart"></canvas></div>
 <div class="insight" id="em_note"></div>
 </div>
 <div class="card">
 <h2>📥 Canal de origen</h2>
-<p class="desc">De dónde vienen las operaciones en marcha.</p>
+<p class="desc">De dónde vienen las operaciones en marcha. Clic en un sector para ver el detalle.</p>
 <div class="chartbox"><canvas id="canalChart"></canvas></div>
 <div class="insight" id="canal_note"></div>
 </div>
@@ -110,179 +188,523 @@ td.r,th.r{text-align:right}
 <span class="pill active" data-p="mensual" onclick="selP(this)">Mensual</span>
 <span class="pill" data-p="trimestral" onclick="selP(this)">Trimestral</span>
 <span class="pill" data-p="semestral" onclick="selP(this)">Semestral</span>
+<span style="flex:1"></span>
+<span class="histctl" id="histCtl">
+<span class="pill sm active" data-h="6" onclick="selH(this)">6m</span>
+<span class="pill sm" data-h="12" onclick="selH(this)">12m</span>
+<span class="pill sm" data-h="24" onclick="selH(this)">24m</span>
+</span>
 </div>
 <p class="desc" id="fac_desc">Honorarios ganados (factura pagada) por mes contable.</p>
 <div class="chartbox" style="height:250px"><canvas id="monthChart"></canvas></div>
 <div class="insight" id="fac_note"></div>
+<div class="caveat hidden" id="fac_caveat">El equipo pasó de 1 a 5 asesores a lo largo de este periodo — compara los meses más antiguos con esa salvedad, no como caída de rendimiento.</div>
 </div>
 
 <div class="row">
 <div class="card">
-<h2>🎯 Tasas de conversión <span style="font-weight:400;color:var(--muted);font-size:12px">(global · 6 meses)</span></h2>
-<p class="desc">46 ganadas · 629 perdidas en el periodo.</p>
-<div class="bars2">
-<div class="bar2"><span>Lead → compromiso (encargo)</span><b>19,3%</b></div>
-<div class="track"><div class="fill" style="width:19%;background:var(--amber)"></div></div>
-<div style="font-size:11px;color:var(--muted);margin:3px 0 12px">~1 de cada 5,2 leads llega a comprometerse.</div>
-<div class="bar2"><span>Compromiso → ganada (factura)</span><b>35,4%</b></div>
-<div class="track"><div class="fill" style="width:35%;background:var(--green2)"></div></div>
-<div style="font-size:11px;color:var(--muted);margin-top:3px">Caídas tras compromiso: 21 denegadas por banco · 63 firmaron con su banco.</div>
-</div>
-<div class="insight g">💡 <b>El cuello sigue en captar; la ejecución se mantiene en torno al 35%.</b> El 19,3% de leads se compromete (19,1% antes) y, de esos, cierran el 35,4% (35,2% antes). Tip: la mayor fuga siguen siendo las 63 operaciones que acabaron firmando con su propio banco tras el encargo (suben desde 62), más del triple que las 21 denegadas por el banco (se mantienen) — reforzar el seguimiento post-encargo y dejar claro el valor del broker.</div>
+<h2>🎯 Tasas de conversión <span id="conv_scope" style="font-weight:400;color:var(--muted);font-size:12px">(global · 6 meses)</span></h2>
+<p class="desc" id="conv_desc"></p>
+<div class="bars2" id="conv_bars"></div>
+<div class="insight g" id="conv_insight"></div>
 </div>
 <div class="card">
 <h2>⚪ Embudo previo <span style="font-weight:400;color:var(--muted);font-size:12px">(global)</span></h2>
-<p class="desc">Sin compromiso aún. 88 operaciones en total.</p>
+<p class="desc" id="emb_desc"></p>
 <table>
 <tr><th>Etapa</th><th class="r">Ops</th><th style="width:42%">Volumen</th></tr>
-<tr><td>💬 Lead</td><td class="r">16</td><td><div class="track" style="margin-top:3px;height:11px"><div class="fill" style="width:30%;height:11px;background:#c1c8d2"></div></div></td></tr>
-<tr><td>🗣️ Asesoramiento realizado</td><td class="r">54</td><td><div class="track" style="margin-top:3px;height:11px"><div class="fill" style="width:100%;height:11px;background:#8a96a6"></div></div></td></tr>
-<tr><td>📄 Documentación recibida</td><td class="r">18</td><td><div class="track" style="margin-top:3px;height:11px"><div class="fill" style="width:33%;height:11px;background:#c1c8d2"></div></div></td></tr>
+<tr id="emb_lead_row"><td>💬 Lead</td><td class="r"></td><td><div class="track" style="margin-top:3px;height:11px"><div class="fill" style="background:#c1c8d2"></div></div></td></tr>
+<tr id="emb_ases_row"><td>🗣️ Asesoramiento realizado</td><td class="r"></td><td><div class="track" style="margin-top:3px;height:11px"><div class="fill" style="background:#8a96a6"></div></div></td></tr>
+<tr id="emb_doc_row"><td>📄 Documentación recibida</td><td class="r"></td><td><div class="track" style="margin-top:3px;height:11px"><div class="fill" style="background:#c1c8d2"></div></div></td></tr>
 </table>
-<div class="alert">⚠️ <b>54 expedientes</b> en "asesoramiento realizado" sin avanzar a encargo — sigue siendo el mayor cuello de botella, prácticamente igual que la actualización anterior (53), mientras los leads nuevos suben de 9 a 16. Tip: campaña de seguimiento (llamada/recordatorio) sobre ese grupo; al 19,3% de conversión son ~10 encargos potenciales (~42.000 € en honorarios).</div>
+<div class="alert" id="emb_alert"></div>
 </div>
 </div>
 
-<p class="note">Datos de Bitrix24 (categoría principal). "En marcha" = Nota de encargo, Revisión de bancos, Aprobados por bancos y FEIN firmada. Embudo previo y conversión son globales. Vistas Trimestral/Semestral son del equipo completo. Bono trimestral 30.000 € / semestral 50.000 € por asesor. Se actualiza automáticamente cada mañana.</p>
+<p class="note">Datos de Bitrix24 (categoría principal). "En marcha" = Nota de encargo, Revisión de bancos, Aprobados por bancos y FEIN firmada. Embudo previo y conversión son globales (y por asesor en la comparativa). Bono trimestral 30.000 € / semestral 50.000 € por asesor. Se actualiza automáticamente cada mañana — el diseño no cambia, solo los datos (data.json).</p>
 
 </div>
+
+<div id="modalRoot"></div>
 
 <script>
-const DATA={
- Todos:{ops:{nota:10,revision:38,aprob:6,fein:0},hon:{nota:42000,revision:169500,aprob:27500,fein:0},canal:{Lead:33,Particular:9,Jorge:9,Inmob:0},mon:{ene:14300,feb:26700,mar:51500,abr:47000,may:38500,jun:16000},totOps:54,totHon:239000,facMes:16000},
- Flor:{ops:{nota:2,revision:5,aprob:6,fein:0},hon:{nota:11500,revision:24000,aprob:27500,fein:0},canal:{Lead:9,Particular:3,Jorge:1,Inmob:0},mon:{ene:8300,feb:18200,mar:10500,abr:5500,may:6000,jun:0},totOps:13,totHon:63000,facMes:0},
- Facundo:{ops:{nota:1,revision:8,aprob:0,fein:0},hon:{nota:5000,revision:38000,aprob:0,fein:0},canal:{Lead:5,Particular:2,Jorge:0,Inmob:0},mon:{ene:2500,feb:4500,mar:19500,abr:18500,may:19500,jun:6000},totOps:9,totHon:43000,facMes:6000},
- Isled:{ops:{nota:0,revision:7,aprob:0,fein:0},hon:{nota:0,revision:32500,aprob:0,fein:0},canal:{Lead:3,Particular:1,Jorge:3,Inmob:0},mon:{ene:3500,feb:0,mar:18500,abr:7000,may:10000,jun:0},totOps:7,totHon:32500,facMes:0},
- David:{ops:{nota:7,revision:16,aprob:0,fein:0},hon:{nota:25500,revision:67000,aprob:0,fein:0},canal:{Lead:16,Particular:3,Jorge:3,Inmob:0},mon:{ene:0,feb:0,mar:0,abr:8000,may:0,jun:10000},totOps:23,totHon:92500,facMes:10000},
- Kelvin:{ops:{nota:0,revision:2,aprob:0,fein:0},hon:{nota:0,revision:8000,aprob:0,fein:0},canal:{Lead:0,Particular:0,Jorge:2,Inmob:0},mon:{ene:0,feb:4000,mar:3000,abr:8000,may:3000,jun:0},totOps:2,totHon:8000,facMes:0}
-};
-const QUARTERS=[{l:'Q3 25',v:63965},{l:'Q4 25',v:95600},{l:'Q1 26',v:119800},{l:'Q2 26',v:92500},{l:'Q3 26',v:101500,curr:true}];
-const SEMESTERS=[{l:'S2 25',v:159565},{l:'S1 26',v:212300},{l:'S2 26',v:101500,curr:true}];
-const OPS={
- Flor:[{n:'Gabriel Mora/compra piso donde vive',h:6000,st:'Aprobado',adv:3},{n:'Jaime López-Montenegro OPERACION 1',h:4500,st:'Aprobado',adv:3},{n:'Borja Blanco Pérez',h:4500,st:'Aprobado',adv:3},{n:'Israel Gomez',h:4500,st:'Aprobado',adv:3},{n:'Lance Paulano Hernández',h:4000,st:'Aprobado',adv:3},{n:'Jaime López-Montenegro OPERACION 2',h:4000,st:'Aprobado',adv:3}],
- Facundo:[{n:'Juan Jose Garcia Lago',h:5500,st:'Revisión',adv:2},{n:'Adria Valencia quiere financiacion',h:5000,st:'Revisión',adv:2},{n:'Ernesto Tarín Martinez (Invernomics)',h:5000,st:'Revisión',adv:2},{n:'Marc - Instagram Broker Invernomics',h:5000,st:'Revisión',adv:2},{n:'Antonio Monaco',h:4500,st:'Revisión',adv:2},{n:'Lucho Pettis Pérez Particular (Ato Monaco)',h:4500,st:'Revisión',adv:2}],
- Isled:[{n:'Lennard Deurman - Instagram Broker Invernomics',h:5500,st:'Revisión',adv:2},{n:'Paula Galeron',h:5000,st:'Revisión',adv:2},{n:'Aitor Montesinos',h:5000,st:'Revisión',adv:2},{n:'Daniel Palazon gonzalvez (Invernomics)',h:5000,st:'Revisión',adv:2},{n:'Eladio De la Espada',h:4000,st:'Revisión',adv:2},{n:'Juan Tarazona',h:4000,st:'Revisión',adv:2}],
- David:[{n:'(Idealista) Nancy Yupa-Visita agendada',h:6000,st:'Revisión',adv:2},{n:'Max Castells',h:5000,st:'Revisión',adv:2},{n:'Pabellon Venezuelan Food - Instagram Broker Invernomics',h:5000,st:'Revisión',adv:2},{n:'Eduardo Gil',h:5000,st:'Revisión',adv:2},{n:'Abel Garcia',h:5000,st:'Revisión',adv:2},{n:'Alexandro Alcazar',h:5000,st:'Revisión',adv:2}],
- Kelvin:[{n:'XIMO/RAUL BETORET',h:5000,st:'Revisión',adv:2},{n:'Josete',h:3000,st:'Revisión',adv:2}]
-};
+let DATA = null;
+let cur = 'Todos', curP = 'mensual', curHist = 6;
+const ADVNAMES = ['Flor','Facundo','Isled','David','Kelvin'];
 const NAVY='#162A41',C_NOTA='#E0A43B',C_REV='#162A41',C_APROB='#8FA63E',C_FEIN='#2E86AB',GREEN2='#8FA63E',TEAL='#2E86AB',AMBER='#E0A43B',RED='#c0392b';
-const eur=n=>n.toLocaleString('es-ES')+' €';
-const SN={nota:'Nota de encargo',revision:'Revisión de bancos',aprob:'Aprobados por banco',fein:'FEIN firmada'};
-const CN={Lead:'Lead Invernomics',Particular:'Particular',Jorge:'Referido Jorge',Inmob:'Referido Inmobiliaria'};
-const BONO_Q=30000,BONO_S=50000;
-let stageChart,canalChart,monthChart,cur='Todos',curP='mensual';
+const eur = n => Math.round(n).toLocaleString('es-ES')+' €';
+const SN = {nota:'Nota de encargo',revision:'Revisión de bancos',aprob:'Aprobados por banco',fein:'FEIN firmada'};
+const CN = {Lead:'Lead Invernomics',Particular:'Particular',Jorge:'Referido Jorge',Inmob:'Referido Inmobiliaria'};
+const BONO_Q=30000, BONO_S=50000;
+let stageChart, canalChart, monthChart;
 
-function rec(ops,gap){const s=[...ops].sort((a,b)=>b.adv-a.adv);let acc=0,p=[];for(const o of s){if(acc>=gap)break;p.push(o);acc+=o.h;}return{p,acc};}
+fetch('./data.json').then(r=>{ if(!r.ok) throw new Error('http '+r.status); return r.json(); })
+  .then(d=>{
+    DATA = d;
+    try{ init(); }
+    catch(renderErr){
+      console.error(renderErr);
+      document.querySelector('.wrap').insertAdjacentHTML('afterbegin', '<div class="card" style="background:#fbeaea;color:#7a2418">Los datos se cargaron correctamente pero el panel no ha podido dibujarse del todo (posible fallo al cargar Chart.js desde el CDN — prueba a recargar la página). Detalle técnico: '+renderErr.message+'</div>');
+    }
+  })
+  .catch(err=>{
+    document.getElementById('hdrMeta').textContent = 'Error cargando datos';
+    document.querySelector('.wrap').insertAdjacentHTML('afterbegin', '<div class="card" style="background:#fbeaea;color:#7a2418">No se han podido cargar los datos (data.json). '+err.message+'</div>');
+  });
 
-function buildBono(a){
- const card=document.getElementById('bonoCard');
- if(a==='Todos'||a==='Kelvin'){card.classList.add('hidden');return;}
- card.classList.remove('hidden');
- const d=DATA[a];
- // Periodo vigente: Q3 (jul–sep) y S2 (jul–dic). De los 6 meses de DATA.mon (abr–sep) julio (mon.abr), agosto (mon.may) y septiembre (mon.jun) caen en el periodo actual.
- const q3=d.mon.abr+d.mon.may+d.mon.jun;
- const s2=d.mon.abr+d.mon.may+d.mon.jun;
- const gq=Math.max(0,BONO_Q-q3), gs=Math.max(0,BONO_S-s2);
- const pq=Math.min(100,Math.round(q3/BONO_Q*100)), ps=Math.min(100,Math.round(s2/BONO_S*100));
- function goal(label,val,obj,pct,gap){
-  const col=gap===0?GREEN2:(pct>=70?AMBER:RED);
-  const tag=gap===0?'<span style="color:#4e6019;font-weight:700">✓ logrado</span>':('faltan <b>'+eur(gap)+'</b>');
-  return '<div class="goal"><div class="gh"><span>'+label+'</span><span><b>'+eur(val)+'</b> / '+eur(obj)+' &nbsp; '+tag+'</span></div><div class="track"><div class="fill" style="width:'+pct+'%;background:'+col+'"></div></div></div>';
- }
- let html='<h2>🏆 Objetivos de bono — '+a+'</h2><p class="desc">Trimestral 30.000 € (Q3: jul–sep) · Semestral 50.000 € (S2: jul–dic). Bono = 150 €/mes.</p>';
- html+=goal('Bono trimestral Q3',q3,BONO_Q,pq,gq);
- html+=goal('Bono semestral S2',s2,BONO_S,ps,gs);
- // recommendation
- let r='';
- if(gq===0&&gs===0){ r='<div class="insight g">✅ <b>'+a+' ya tiene asegurados los dos bonos</b> de este periodo. A consolidar el siguiente trimestre con el pipeline en revisión.</div>'; }
- else {
-  const target = gq>0 ? {name:'trimestral (cierra el 28 sep)',gap:gq} : {name:'semestral (cierra el 28 dic)',gap:gs};
-  const picks=rec(OPS[a]||[],target.gap);
-  if(picks.p.length && picks.acc>=target.gap){
-   r='<div class="insight a">🎯 <b>Para el bono '+target.name+ ' faltan '+eur(target.gap)+'.</b> Operaciones a empujar (las más maduras primero): '+picks.p.map(o=>o.n+' <span style="opacity:.7">('+o.st+', '+eur(o.h)+')</span>').join(' · ')+'. Cierran de sobra el objetivo si pagan factura antes del 28.</div>';
-  } else {
-   r='<div class="insight a">🎯 <b>Para el bono '+target.name+' faltan '+eur(target.gap)+'.</b> Su pipeline maduro actual ('+eur(picks.acc)+') no llega: hay que acelerar las operaciones en revisión y/o sumar nuevas entradas. '+(a==='David'?'Como junior, prioridad: convertir su primera operación.':'')+'</div>';
+// ---------- helpers ----------
+function parseDMY(s){ const [d,m,y]=s.split('/').map(Number); return new Date(y,m-1,d); }
+function allDeals(adv){ if(adv==='Todos'){ let a=[]; for(const n of ADVNAMES) a=a.concat(DATA.deals[n]); return a; } return DATA.deals[adv]||[]; }
+function teamAvg(key){ return ADVNAMES.reduce((s,n)=>s+DATA.conversion[n][key],0)/ADVNAMES.length; }
+function stuckCount(adv, minDays){ return allDeals(adv).filter(d=>d.dias>=minDays).length; }
+function stuckRatio(adv){ const ds=allDeals(adv); if(!ds.length) return 0; return ds.filter(d=>d.dias>=60).length/ds.length; }
+
+// ---------- semaphore / scoring ----------
+function computeSemaforo(adv){
+  if(adv==='Kelvin'){
+    return {color:'a', score:null, reasons:['Cartera muy pequeña (solo '+DATA.stageSummary.Kelvin.totOps+' operaciones en marcha) — no comparable con el resto del equipo, Kelvin reparte su tiempo en gestión.']};
   }
- }
- html+=r;
- card.innerHTML=html;
+  const conv = DATA.conversion[adv];
+  const avgCompGan = teamAvg('compGan');
+  const sRatio = stuckRatio(adv);
+  const compScore = clamp(50 + (conv.compGan - avgCompGan)*2.2, 0, 100);
+  const stuckScore = clamp(100 - sRatio*170, 0, 100);
+  const bono = bonoProgress(adv);
+  const bonoScore = bono ? bono.paceScore : 60;
+  const total = compScore*0.4 + stuckScore*0.4 + bonoScore*0.2;
+  let color = total>=68?'g':(total>=42?'a':'r');
+  // build candidate reasons tagged with the severity of the factor they come from
+  // (lower sev = worse). When the overall color is good, lead with the best
+  // factor; when it's amber/red, lead with the worst one — so the headline
+  // reason always matches the badge color instead of contradicting it.
+  const candidates = [];
+  candidates.push({sev:compScore, text: conv.compGan < avgCompGan-5
+    ? 'conversión compromiso→ganada ('+conv.compGan+'%) por debajo de la media del equipo ('+avgCompGan.toFixed(1)+'%)'
+    : (conv.compGan >= avgCompGan+5 ? 'conversión compromiso→ganada ('+conv.compGan+'%) por encima de la media ('+avgCompGan.toFixed(1)+'%)' : 'conversión en línea con la media del equipo')});
+  candidates.push({sev:stuckScore, text: sRatio>0.3
+    ? Math.round(sRatio*100)+'% de su cartera lleva 60+ días sin moverse'
+    : (sRatio<0.1 ? 'cartera ágil, casi nada estancado' : Math.round(sRatio*100)+'% de su cartera con 60+ días, dentro de lo normal')});
+  if(bono) candidates.push({sev:bonoScore, text: bono.gapQ>0 ? 'bono trimestral: faltan '+eur(bono.gapQ) : 'bono trimestral asegurado'});
+  candidates.sort((a,b)=> color==='g' ? b.sev-a.sev : a.sev-b.sev);
+  const reasons = candidates.map(c=>c.text);
+  return {color, score:Math.round(total), reasons};
+}
+function clamp(n,a,b){ return Math.max(a,Math.min(b,n)); }
+
+function bonoProgress(adv){
+  if(adv==='Kelvin') return null;
+  const hist = DATA.history;
+  const currQ = DATA.QUARTERS[DATA.QUARTERS.length-1];
+  // sum this advisor's totals for the months belonging to the current quarter
+  const q = hist.filter(h=>Math.ceil(h.m/3)===currQ.q && h.y===currQ.y).reduce((s,h)=>s+(h.byAdvisor[adv]||0),0);
+  const gapQ = Math.max(0, BONO_Q - q);
+  const monthsInQ = hist.filter(h=>Math.ceil(h.m/3)===currQ.q && h.y===currQ.y);
+  const monthsElapsedFraction = monthsInQ.reduce((s,h)=>s + (h.curr? monthFraction() : 1), 0)/3;
+  const expected = BONO_Q*monthsElapsedFraction;
+  const paceScore = clamp(50 + ((q-expected)/BONO_Q)*140, 0, 100);
+  return {q, gapQ, paceScore, monthsElapsedFraction};
+}
+function monthFraction(){
+  const ini=parseDMY(DATA.meta.mesContableInicio), fin=parseDMY(DATA.meta.mesContableFin), hoy=parseDMY(DATA.meta.fecha);
+  const total=(fin-ini)/86400000+1, el=(hoy-ini)/86400000+1;
+  return clamp(el/total,0.02,1);
 }
 
+// ---------- init ----------
+function init(){
+  const ini=parseDMY(DATA.meta.mesContableInicio), fin=parseDMY(DATA.meta.mesContableFin), hoy=parseDMY(DATA.meta.fecha);
+  const totalDays=Math.round((fin-ini)/86400000)+1, elapsed=Math.round((hoy-ini)/86400000)+1;
+  document.getElementById('hdrMeta').innerHTML = 'Datos al '+DATA.meta.fecha+'<br>Objetivo mensual <b>'+eur(DATA.meta.objetivoMensualEquipo)+'</b><br>Mes contable: día '+elapsed+' de '+totalDays;
+  renderSemRow();
+  renderComparativa();
+  renderPriorities();
+  renderAlerts();
+  build('Todos');
+}
+
+function renderSemRow(){
+  const el = document.getElementById('semRow');
+  let html='';
+  for(const n of ADVNAMES){
+    const s = computeSemaforo(n);
+    html += '<div class="semchip" data-a="'+n+'" onclick="selByName(\''+n+'\')"><span class="semdot '+s.color+'"></span><span><span class="nm">'+n+'</span><span class="rs">'+(s.reasons[0]||'sin datos suficientes')+'</span></span></div>';
+  }
+  el.innerHTML = html;
+}
+function selByName(n){
+  document.querySelectorAll('.chip').forEach(c=>{ if(c.dataset.a===n) sel(c); });
+}
+
+// ---------- filter chips ----------
+function sel(el){
+  document.querySelectorAll('.chip').forEach(c=>c.classList.remove('active'));
+  el.classList.add('active');
+  document.querySelectorAll('.semchip').forEach(c=>c.classList.toggle('active', c.dataset.a===el.dataset.a));
+  cur = el.dataset.a;
+  build(cur);
+}
+function selP(el){ document.querySelectorAll('#faclist .pill').forEach(c=>{}); document.querySelectorAll('.pills .pill').forEach(c=>{ if(!c.dataset.h) c.classList.remove('active'); }); el.classList.add('active'); curP = el.dataset.p; document.getElementById('histCtl').classList.toggle('hidden', curP!=='mensual'); renderFac(); }
+function selH(el){ document.querySelectorAll('#histCtl .pill').forEach(c=>c.classList.remove('active')); el.classList.add('active'); curHist = parseInt(el.dataset.h); renderFac(); }
+
+// ---------- KPI + charts for selected advisor ----------
 function build(a){
- const d=DATA[a];
- const pend=d.hon.fein+d.hon.aprob, techo=d.facMes+pend;
- document.getElementById('k_ops').textContent=d.totOps;
- document.getElementById('k_hon').textContent=eur(d.totHon);
- document.getElementById('k_fac').textContent=eur(d.facMes);
- document.getElementById('k_fac_s').textContent='Proyección techo: '+eur(techo);
- document.getElementById('em_desc').textContent=a==='Todos'?'Compromiso del cliente firmado: de Nota de encargo a FEIN firmada.':'Operaciones en marcha de '+a+'.';
+  const d = DATA.stageSummary[a];
+  const pend = d.hon.fein + d.hon.aprob, techo = 0 + pend; // facMes computed from history current month below
+  const currMonth = DATA.history[DATA.history.length-1];
+  const facMes = a==='Todos' ? currMonth.total : currMonth.byAdvisor[a];
+  document.getElementById('k_ops').textContent = d.totOps;
+  document.getElementById('k_hon').textContent = eur(d.totHon);
+  document.getElementById('k_fac').textContent = eur(facMes);
+  document.getElementById('k_fac_l').textContent = 'Facturado este mes ('+monthShort(currMonth.m)+')';
+  const ini=parseDMY(DATA.meta.mesContableInicio), hoy=parseDMY(DATA.meta.fecha), fin=parseDMY(DATA.meta.mesContableFin);
+  const elapsed=Math.round((hoy-ini)/86400000)+1, total=Math.round((fin-ini)/86400000)+1;
+  document.getElementById('k_fac_s').textContent = 'Techo si cobra pendiente: '+eur(facMes+pend)+' · día '+elapsed+'/'+total;
+  const conv = DATA.conversion[a];
+  document.getElementById('k_conv').textContent = conv.compGan+'%';
+  document.getElementById('k_conv_s').textContent = (a==='Todos'?'global':a) + ' · 6 meses · '+conv.won+'g/'+conv.tras+'p';
 
- if(stageChart)stageChart.destroy();
- stageChart=new Chart(document.getElementById('stageChart'),{type:'bar',
-  data:{labels:['Nota encargo','Revisión bancos','Aprobados','FEIN firmada'],
-   datasets:[{label:'Honorarios',data:[d.hon.nota,d.hon.revision,d.hon.aprob,d.hon.fein],backgroundColor:[C_NOTA,C_REV,C_APROB,C_FEIN],borderRadius:6}]},
-  options:{indexAxis:'y',responsive:true,maintainAspectRatio:false,
-   plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>{const o=[d.ops.nota,d.ops.revision,d.ops.aprob,d.ops.fein][c.dataIndex];return eur(c.parsed.x)+' · '+o+' ops';}}}},
-   scales:{x:{ticks:{callback:v=>(v/1000)+'k'}}}}});
- let domS='nota',domH=-1;for(const s in d.hon){if(d.hon[s]>domH){domH=d.hon[s];domS=s;}}
- let emt='El grueso del pipeline está en <b>'+SN[domS]+'</b> ('+eur(domH)+'). ';
- emt+= pend>0?'Tip: FEIN + aprobados suman <b>'+eur(pend)+'</b> de cobro inminente — empújalos a factura antes del cierre.':'Tip: no hay nada en FEIN ni aprobado; el foco es mover las de revisión hacia aprobación de banco.';
- document.getElementById('em_note').innerHTML=emt;
+  document.getElementById('em_desc').textContent = a==='Todos' ? 'Compromiso del cliente firmado: de Nota de encargo a FEIN firmada. Clic en una barra para ver las operaciones.' : 'Operaciones en marcha de '+a+'. Clic en una barra para ver el detalle.';
 
- if(canalChart)canalChart.destroy();
- const cv=[d.canal.Lead,d.canal.Particular,d.canal.Jorge,d.canal.Inmob];
- canalChart=new Chart(document.getElementById('canalChart'),{type:'doughnut',
-  data:{labels:['Lead Invernomics','Particular','Referido Jorge','Referido Inmob.'],datasets:[{data:cv,backgroundColor:[NAVY,TEAL,GREEN2,AMBER],borderWidth:2,borderColor:'#fff'}]},
-  options:{responsive:true,maintainAspectRatio:false,cutout:'58%',plugins:{legend:{position:'right',labels:{boxWidth:12,font:{size:11}}}}}});
- const totC=cv.reduce((x,y)=>x+y,0);let topK='Lead',topV=-1;for(const k of ['Lead','Particular','Jorge','Inmob']){if(d.canal[k]>topV){topV=d.canal[k];topK=k;}}
- const pct=totC?Math.round(topV/totC*100):0;
- let cnt='<b>'+CN[topK]+'</b> es el canal principal: '+topV+' de '+totC+' ops ('+pct+'%). ';
- cnt+= topK==='Lead'?'Tip: el lead propio es el de mayor retorno — proteger su volumen y velocidad de respuesta es prioridad.':'Tip: conviene reforzar el lead propio de Invernomics, que suele convertir mejor que los referidos.';
- document.getElementById('canal_note').innerHTML=cnt;
+  if(stageChart) stageChart.destroy();
+  const stageKeys=['nota','revision','aprob','fein'];
+  stageChart = new Chart(document.getElementById('stageChart'), {type:'bar',
+    data:{labels:['Nota encargo','Revisión bancos','Aprobados','FEIN firmada'],
+      datasets:[{label:'Honorarios', data:stageKeys.map(k=>d.hon[k]), backgroundColor:[C_NOTA,C_REV,C_APROB,C_FEIN], borderRadius:6}]},
+    options:{indexAxis:'y', responsive:true, maintainAspectRatio:false,
+      onClick:(evt,els)=>{ if(!els.length) return; const k=stageKeys[els[0].index]; openDealsModal(SN[k]+' — '+a, allDeals(a).filter(x=>x.stKey===k)); },
+      plugins:{legend:{display:false}, tooltip:{callbacks:{label:c=>{ const o=d.ops[stageKeys[c.dataIndex]]; return eur(c.parsed.x)+' · '+o+' ops (clic para ver)'; }}}},
+      scales:{x:{ticks:{callback:v=>(v/1000)+'k'}}}}});
 
- buildBono(a);
- renderFac();
+  let domS='nota', domH=-1; for(const s in d.hon){ if(d.hon[s]>domH){ domH=d.hon[s]; domS=s; } }
+  let emt = 'El grueso del pipeline está en <b>'+SN[domS]+'</b> ('+eur(domH)+'). ';
+  emt += pend>0 ? 'Tip: FEIN + aprobados suman <b>'+eur(pend)+'</b> de cobro inminente — empújalos a factura antes del cierre.' : 'Tip: no hay nada en FEIN ni aprobado; el foco es mover las de revisión hacia aprobación de banco.';
+  const oldCount = allDeals(a).filter(x=>x.dias>=90).length;
+  if(oldCount>0) emt += ' <b>'+oldCount+' operación'+(oldCount>1?'es':'')+'</b> lleva'+(oldCount>1?'n':'')+' 90+ días paradas.';
+  document.getElementById('em_note').innerHTML = emt;
+
+  if(canalChart) canalChart.destroy();
+  const canalKeys=['Lead','Particular','Jorge','Inmob'];
+  const cv = canalKeys.map(k=>d.canal[k]);
+  canalChart = new Chart(document.getElementById('canalChart'), {type:'doughnut',
+    data:{labels:canalKeys.map(k=>CN[k]), datasets:[{data:cv, backgroundColor:[NAVY,TEAL,GREEN2,AMBER], borderWidth:2, borderColor:'#fff'}]},
+    options:{responsive:true, maintainAspectRatio:false, cutout:'58%',
+      onClick:(evt,els)=>{ if(!els.length) return; const k=canalKeys[els[0].index]; openDealsModal(CN[k]+' — '+a, allDeals(a).filter(x=>x.canal===k)); },
+      plugins:{legend:{position:'right', labels:{boxWidth:12, font:{size:11}}}}}});
+  const totC = cv.reduce((x,y)=>x+y,0); let topK='Lead', topV=-1;
+  for(const k of canalKeys){ if(d.canal[k]>topV){ topV=d.canal[k]; topK=k; } }
+  const pct = totC ? Math.round(topV/totC*100) : 0;
+  let cnt = '<b>'+CN[topK]+'</b> es el canal principal: '+topV+' de '+totC+' ops ('+pct+'%). ';
+  cnt += topK==='Lead' ? 'Tip: el lead propio es el de mayor retorno — proteger su volumen y velocidad de respuesta es prioridad.' : 'Tip: conviene reforzar el lead propio de Invernomics, que suele convertir mejor que los referidos.';
+  document.getElementById('canal_note').innerHTML = cnt;
+
+  buildBono(a);
+  renderConversion(a);
+  renderEmbudo();
+  renderFac();
+}
+function monthShort(m){ return ['','ene','feb','mar','abr','may','jun','jul','ago','sep','oct','nov','dic'][m]; }
+
+// ---------- bono card ----------
+function buildBono(a){
+  const card = document.getElementById('bonoCard');
+  if(a==='Todos' || a==='Kelvin'){ card.classList.add('hidden'); return; }
+  card.classList.remove('hidden');
+  const hist = DATA.history;
+  const currQ = DATA.QUARTERS[DATA.QUARTERS.length-1];
+  const q3 = hist.filter(h=>Math.ceil(h.m/3)===currQ.q && h.y===currQ.y).reduce((s,h)=>s+(h.byAdvisor[a]||0),0);
+  const currS = DATA.SEMESTERS[DATA.SEMESTERS.length-1];
+  const s2 = hist.filter(h=>(h.m<=6?1:2)===currS.s && h.y===currS.y).reduce((s,h)=>s+(h.byAdvisor[a]||0),0);
+  const gq = Math.max(0, BONO_Q-q3), gs = Math.max(0, BONO_S-s2);
+  const pq = Math.min(100, Math.round(q3/BONO_Q*100)), ps = Math.min(100, Math.round(s2/BONO_S*100));
+  function goal(label,val,obj,pct,gap){
+    const col = gap===0?GREEN2:(pct>=70?AMBER:RED);
+    const tag = gap===0?'<span style="color:#4e6019;font-weight:700">✓ logrado</span>':('faltan <b>'+eur(gap)+'</b>');
+    return '<div class="goal"><div class="gh"><span>'+label+'</span><span><b>'+eur(val)+'</b> / '+eur(obj)+' &nbsp; '+tag+'</span></div><div class="track"><div class="fill" style="width:'+pct+'%;background:'+col+'"></div></div></div>';
+  }
+  let html = '<h2>🏆 Objetivos de bono — '+a+'</h2><p class="desc">Trimestral 30.000 € ('+currQ.l+') · Semestral 50.000 € ('+currS.l+'). Bono = 150 €/mes.</p>';
+  html += goal('Bono trimestral '+currQ.l, q3, BONO_Q, pq, gq);
+  html += goal('Bono semestral '+currS.l, s2, BONO_S, ps, gs);
+  const mf = monthFraction();
+  const monthsElapsed = 1; // months fully/partially elapsed in this quarter beyond the current one are 0 since quarter just started in most cases; handled generically below
+  let r = '';
+  if(gq===0 && gs===0){
+    r = '<div class="insight g">✅ <b>'+a+' ya tiene asegurados los dos bonos</b> de este periodo. A consolidar el siguiente trimestre con el pipeline en revisión.</div>';
+  } else {
+    const target = gq>0 ? {name:currQ.l+' (trimestral)', gap:gq} : {name:currS.l+' (semestral)', gap:gs};
+    const picks = rec(DATA.OPS[a]||[], target.gap);
+    if(picks.p.length && picks.acc>=target.gap){
+      r = '<div class="insight a">🎯 <b>Para el bono '+target.name+' faltan '+eur(target.gap)+'.</b> Operaciones a empujar (las más maduras primero): '+picks.p.map(o=>'<span class="clickdeal" data-id="'+o.id+'">'+o.n+' <span style="opacity:.7">('+o.st+', '+eur(o.h)+', '+o.dias+'d)</span></span>').join(' · ')+'. Cierran de sobra el objetivo si pagan factura antes del cierre.</div>';
+    } else {
+      r = '<div class="insight a">🎯 <b>Para el bono '+target.name+' faltan '+eur(target.gap)+'.</b> Su pipeline maduro actual ('+eur(picks.acc)+') no llega: hay que acelerar las operaciones en revisión y/o sumar nuevas entradas.</div>';
+    }
+  }
+  html += r;
+  card.innerHTML = html;
+}
+function rec(ops, gap){ const s=[...ops].sort((a,b)=>b.adv-a.adv); let acc=0,p=[]; for(const o of s){ if(acc>=gap) break; p.push(o); acc+=o.h; } return {p, acc}; }
+
+// ---------- conversion ----------
+function renderConversion(a){
+  const conv = DATA.conversion[a];
+  document.getElementById('conv_scope').textContent = a==='Todos' ? '(global · 6 meses)' : '('+a+' · 6 meses)';
+  document.getElementById('conv_desc').textContent = conv.won+' ganadas · '+(conv.antes+conv.tras)+' perdidas en el periodo.';
+  const ratio = conv.todas ? Math.round(conv.todas/(conv.won+conv.tras)*10)/10 : 0;
+  document.getElementById('conv_bars').innerHTML =
+    '<div class="bar2"><span>Lead → compromiso (encargo)</span><b>'+conv.leadComp+'%</b></div>'+
+    '<div class="track"><div class="fill" style="width:'+Math.round(conv.leadComp)+'%;background:var(--amber)"></div></div>'+
+    '<div style="font-size:11px;color:var(--muted);margin:3px 0 12px">~1 de cada '+ratio+' leads llega a comprometerse.</div>'+
+    '<div class="bar2"><span>Compromiso → ganada (factura)</span><b>'+conv.compGan+'%</b></div>'+
+    '<div class="track"><div class="fill" style="width:'+Math.round(conv.compGan)+'%;background:var(--green2)"></div></div>'+
+    '<div class="alert" id="conv_tras_line" style="margin-top:3px;background:none;border:none;padding:0;color:var(--muted);font-size:11px">Caídas tras compromiso: clic para ver el detalle · '+conv.tras+' operaciones perdidas tras el encargo.</div>';
+  document.getElementById('conv_tras_line').onclick = ()=> openDealsModal('Perdidas tras compromiso — '+a, (a==='Todos'?DATA.perdTrasItems:DATA.perdTrasItems.filter(x=>x.advisor===a)).map(x=>({...x, st:x.tipo})));
+  const avg = teamAvg('compGan');
+  let insight = a==='Todos'
+    ? '💡 <b>El cuello sigue en captar (compromiso '+conv.leadComp+'%); la ejecución cierra el '+conv.compGan+'% de lo comprometido.</b> Clic en "detalle" arriba para ver qué operaciones se pierden tras el encargo.'
+    : '💡 <b>'+a+' cierra el '+conv.compGan+'%</b> de lo que compromete (media del equipo: '+avg.toFixed(1)+'%). '+(conv.compGan>=avg?'Por encima de la media.':'Por debajo de la media — revisar seguimiento post-encargo.');
+  document.getElementById('conv_insight').innerHTML = insight;
 }
 
+// ---------- embudo ----------
+function renderEmbudo(){
+  const e = DATA.embudo;
+  const total = e.lead.count + e.asesor.count + e.doc.count;
+  document.getElementById('emb_desc').textContent = 'Sin compromiso aún. '+total+' operaciones en total.';
+  const maxC = Math.max(e.lead.count, e.asesor.count, e.doc.count) || 1;
+  function fillRow(id, obj, color, label){
+    const row = document.getElementById(id);
+    row.querySelector('td.r').textContent = obj.count;
+    row.querySelector('.fill').style.width = Math.round(obj.count/maxC*100)+'%';
+    row.querySelector('.fill').style.background = color;
+    row.onclick = ()=> openDealsModal(label, obj.items.map(x=>({...x, st:label})));
+    row.style.cursor='pointer';
+  }
+  fillRow('emb_lead_row', e.lead, '#c1c8d2', '💬 Lead');
+  fillRow('emb_ases_row', e.asesor, '#8a96a6', '🗣️ Asesoramiento realizado');
+  fillRow('emb_doc_row', e.doc, '#c1c8d2', '📄 Documentación recibida');
+  const stuckAsesor = e.asesor.items.filter(x=>x.dias>=30).length;
+  const convGlobal = DATA.conversion.Todos;
+  const potenciales = Math.round(e.asesor.count * convGlobal.leadComp/100);
+  const avgFee = DATA.stageSummary.Todos.hon.nota / (DATA.stageSummary.Todos.ops.nota||1);
+  const potHon = Math.round(potenciales*avgFee/1000)*1000;
+  document.getElementById('emb_alert').innerHTML = '⚠️ <b>'+e.asesor.count+' expedientes</b> en "asesoramiento realizado" sin avanzar a encargo ('+stuckAsesor+' llevan 30+ días). Tip: campaña de seguimiento sobre ese grupo; al '+convGlobal.leadComp+'% de conversión son ~'+potenciales+' encargos potenciales (~'+eur(potHon)+' en honorarios). Clic para ver el listado.';
+  document.getElementById('emb_alert').onclick = ()=> openDealsModal('🗣️ Asesoramiento realizado (sin encargo)', e.asesor.items.map(x=>({...x, st:'Asesoramiento'})));
+}
+
+// ---------- facturación ----------
 function renderFac(){
- const a=cur,d=DATA[a];
- const scope=document.getElementById('fac_scope'),desc=document.getElementById('fac_desc');
- let labels,vals,colors,ds,note='';
- if(curP==='mensual'){
-  scope.textContent=a==='Todos'?'mensual — equipo':'mensual — '+a;
-  desc.textContent='Honorarios ganados (factura pagada) por mes contable.';
-  labels=['Abr','May','Jun','Jul','Ago','Sep'];
-  vals=[d.mon.ene,d.mon.feb,d.mon.mar,d.mon.abr,d.mon.may,d.mon.jun];
-  ds=[{label:'Honorarios',data:vals,backgroundColor:NAVY,borderRadius:6,order:2}];
-  if(a==='Todos')ds.push({label:'Objetivo',type:'line',data:[50000,50000,50000,50000,50000,50000],borderColor:RED,borderDash:[6,4],borderWidth:2,pointRadius:0,order:1});
-  const avg=Math.round(vals.reduce((x,y)=>x+y,0)/6),pend=d.hon.fein+d.hon.aprob,techo=d.facMes+pend;
-  note='Media 6 meses: <b>'+eur(avg)+'</b>'+(a==='Todos'?' · objetivo 50.000 €':'')+'. Septiembre va por poco más de dos tercios (mes contable 29/08–28/09) y sigue en '+eur(d.facMes)+', con <b>techo '+eur(techo)+'</b> si cobran los pendientes. ';
-  note+= a==='Todos'?'Tip: hay <b>'+eur(pend)+'</b> en FEIN y aprobados esperando a facturarse — empujarlos a cobro antes del 28 asegura gran parte del techo de septiembre.':'';
- } else if(curP==='trimestral'){
-  scope.textContent='trimestral — equipo';
-  desc.textContent='Honorarios del equipo por trimestre contable (último en curso).';
-  labels=QUARTERS.map(q=>q.l);vals=QUARTERS.map(q=>q.v);
-  ds=[{label:'Honorarios',data:vals,backgroundColor:QUARTERS.map(q=>q.curr?GREEN2:NAVY),borderRadius:6}];
-  const q2=92500,q1=119800,q3ly=63965;
-  note='Q2 2026 cerró completo en <b>'+eur(q2)+'</b>, por debajo del Q1 2026 (<b>'+eur(q1)+'</b>). El Q3 2026 en curso ya lleva <b>101.500 €</b> (julio, agosto y septiembre), superando tanto al Q2 2026 como al mismo trimestre del año pasado (Q3 2025: <b>'+eur(q3ly)+'</b>). Tip: hoy es el cierre contable de septiembre (29/08–28/09) — es el último día para pasar a factura lo que quede en revisión y aprobados y que sume al cierre del trimestre.';
- } else {
-  scope.textContent='semestral — equipo';
-  desc.textContent='Honorarios del equipo por semestre contable (último en curso).';
-  labels=SEMESTERS.map(s=>s.l);vals=SEMESTERS.map(s=>s.v);
-  ds=[{label:'Honorarios',data:vals,backgroundColor:SEMESTERS.map(s=>s.curr?GREEN2:NAVY),borderRadius:6}];
-  note='S1 2026 cerró en <b>'+eur(212300)+'</b>, un <b>+33%</b> por encima del semestre anterior (S2 2025: '+eur(159565)+') y muy por encima del S1 2025 ('+eur(77200)+', <b>+175%</b>). El S2 2026 lleva <b>101.500 €</b> en julio, agosto y septiembre (mes contable que cierra hoy); manteniendo el ritmo podría rondar los 200.000-220.000 € al cierre del semestre. Tip: crecimiento sólido y sostenido semestre a semestre.';
- }
- if(monthChart)monthChart.destroy();
- monthChart=new Chart(document.getElementById('monthChart'),{type:'bar',
-  data:{labels,datasets:ds},
-  options:{responsive:true,maintainAspectRatio:false,
-   plugins:{legend:{display:curP==='mensual'&&a==='Todos',labels:{boxWidth:12,font:{size:11}}},tooltip:{callbacks:{label:c=>c.dataset.label+': '+eur(c.parsed.y)}}},
-   scales:{y:{ticks:{callback:v=>(v/1000)+'k'}}}}});
- document.getElementById('fac_note').innerHTML=note;
+  const a = cur, d = DATA.stageSummary[a];
+  const scope = document.getElementById('fac_scope'), desc = document.getElementById('fac_desc');
+  let labels, vals, ds, note='';
+  document.getElementById('fac_caveat').classList.add('hidden');
+  if(curP==='mensual'){
+    scope.textContent = (a==='Todos'?'mensual — equipo':'mensual — '+a) + ' · últimos '+curHist+' meses';
+    desc.textContent = 'Honorarios ganados (factura pagada) por mes contable.';
+    const slice = DATA.history.slice(-curHist);
+    labels = slice.map(h=>h.label);
+    vals = slice.map(h=> a==='Todos'? h.total : h.byAdvisor[a]);
+    ds = [{label:'Honorarios', data:vals, backgroundColor:NAVY, borderRadius:6, order:2}];
+    if(a==='Todos') ds.push({label:'Objetivo', type:'line', data:slice.map(()=>DATA.meta.objetivoMensualEquipo), borderColor:RED, borderDash:[6,4], borderWidth:2, pointRadius:0, order:1});
+    const closedVals = slice.slice(0,-1).map((h,i)=>vals[i]);
+    const avg = closedVals.length ? Math.round(closedVals.reduce((x,y)=>x+y,0)/closedVals.length) : 0;
+    const curr = slice[slice.length-1];
+    const facMes = vals[vals.length-1];
+    const pend = d.hon.fein + d.hon.aprob;
+    const ini=parseDMY(DATA.meta.mesContableInicio), hoy=parseDMY(DATA.meta.fecha), fin=parseDMY(DATA.meta.mesContableFin);
+    const elapsed=Math.round((hoy-ini)/86400000)+1, totalD=Math.round((fin-ini)/86400000)+1;
+    note = 'Media de los '+closedVals.length+' meses cerrados: <b>'+eur(avg)+'</b>'+(a==='Todos'?' · objetivo 50.000 €':'')+'. '+curr.label+' va por el día '+elapsed+' de '+totalD+' y lleva '+eur(facMes)+', con <b>techo '+eur(facMes+pend)+'</b> si cobra lo pendiente. ';
+    if(a==='Todos' && pend>0) note += 'Tip: hay <b>'+eur(pend)+'</b> en FEIN y aprobados esperando a facturarse.';
+    if(curHist>=12) document.getElementById('fac_caveat').classList.remove('hidden');
+  } else if(curP==='trimestral'){
+    scope.textContent = 'trimestral — equipo';
+    desc.textContent = 'Honorarios del equipo por trimestre contable (último en curso).';
+    labels = DATA.QUARTERS.map(q=>q.l); vals = DATA.QUARTERS.map(q=>q.v);
+    ds = [{label:'Honorarios', data:vals, backgroundColor:DATA.QUARTERS.map(q=>q.curr?GREEN2:NAVY), borderRadius:6}];
+    const closed = DATA.QUARTERS.filter(q=>!q.curr);
+    const last = closed[closed.length-1], prev = closed[closed.length-2];
+    const currQ = DATA.QUARTERS[DATA.QUARTERS.length-1];
+    note = last ? (last.l+' cerró completo en <b>'+eur(last.v)+'</b>'+(prev?', '+(last.v>=prev.v?'por encima':'por debajo')+' del '+prev.l+' (<b>'+eur(prev.v)+'</b>)':'')+'. '+currQ.l+' acaba de empezar: lleva <b>'+eur(currQ.v)+'</b>.') : '';
+  } else {
+    scope.textContent = 'semestral — equipo';
+    desc.textContent = 'Honorarios del equipo por semestre contable (último en curso).';
+    labels = DATA.SEMESTERS.map(s=>s.l); vals = DATA.SEMESTERS.map(s=>s.v);
+    ds = [{label:'Honorarios', data:vals, backgroundColor:DATA.SEMESTERS.map(s=>s.curr?GREEN2:NAVY), borderRadius:6}];
+    const closed = DATA.SEMESTERS.filter(s=>!s.curr);
+    const last = closed[closed.length-1], prev = closed[closed.length-2];
+    const currS = DATA.SEMESTERS[DATA.SEMESTERS.length-1];
+    note = last ? (last.l+' cerró en <b>'+eur(last.v)+'</b>'+(prev?(last.v>=prev.v?', un <b>+'+Math.round((last.v/prev.v-1)*100)+'%</b> por encima del semestre anterior ('+prev.l+': '+eur(prev.v)+')':', por debajo del semestre anterior ('+prev.l+': '+eur(prev.v)+')'):'')+'. '+currS.l+' acaba de empezar: lleva <b>'+eur(currS.v)+'</b>.') : '';
+  }
+  if(monthChart) monthChart.destroy();
+  monthChart = new Chart(document.getElementById('monthChart'), {type:'bar',
+    data:{labels, datasets:ds},
+    options:{responsive:true, maintainAspectRatio:false,
+      plugins:{legend:{display:curP==='mensual'&&a==='Todos', labels:{boxWidth:12, font:{size:11}}}, tooltip:{callbacks:{label:c=>c.dataset.label+': '+eur(c.parsed.y)}}},
+      scales:{y:{ticks:{callback:v=>(v/1000)+'k'}}}}});
+  document.getElementById('fac_note').innerHTML = note;
 }
 
-function sel(el){document.querySelectorAll('.chip').forEach(c=>c.classList.remove('active'));el.classList.add('active');cur=el.dataset.a;build(cur);}
-function selP(el){document.querySelectorAll('.pill').forEach(c=>c.classList.remove('active'));el.classList.add('active');curP=el.dataset.p;renderFac();}
-build('Todos');
+// ---------- comparativa del equipo ----------
+let cmpSort = {key:'compGan', dir:-1};
+function cmpMetric(n, key){
+  const ss = DATA.stageSummary[n], conv = DATA.conversion[n];
+  switch(key){
+    case 'totOps': return ss.totOps;
+    case 'totHon': return ss.totHon;
+    case 'fac6m': return DATA.history.slice(-6).reduce((s,h)=>s+h.byAdvisor[n],0);
+    case 'leadComp': return conv.leadComp;
+    case 'compGan': return conv.compGan;
+    case 'stuck': return stuckCount(n,60);
+    case 'estado': return computeSemaforo(n).score||0;
+  }
+}
+function renderComparativa(){
+  const cols = [
+    {key:'nm', label:'Asesor'},
+    {key:'totOps', label:'En marcha', fmt:v=>v, bar:true, max:()=>Math.max(...ADVNAMES.map(n=>cmpMetric(n,'totOps')))},
+    {key:'fac6m', label:'Facturado 6m', fmt:eur, bar:true, max:()=>Math.max(...ADVNAMES.map(n=>cmpMetric(n,'fac6m')))},
+    {key:'leadComp', label:'Captación (lead→encargo)', fmt:v=>v+'%', bar:true, max:()=>100, statusHigh:true},
+    {key:'compGan', label:'Cierre (encargo→ganada)', fmt:v=>v+'%', bar:true, max:()=>100, statusHigh:true},
+    {key:'stuck', label:'Estancadas 60d+', fmt:v=>v, bar:true, max:()=>Math.max(1,...ADVNAMES.map(n=>cmpMetric(n,'stuck'))), statusHigh:false},
+    {key:'estado', label:'Estado', badge:true},
+  ];
+  let rows = ADVNAMES.map(n=>({n, ...Object.fromEntries(cols.filter(c=>c.key!=='nm').map(c=>[c.key, cmpMetric(n,c.key)]))}));
+  rows.sort((a,b)=> (a[cmpSort.key]-b[cmpSort.key])*cmpSort.dir);
+  let thead = '<tr>'+cols.map(c=>'<th'+(c.key!=='nm'?' class="r" onclick="sortCmp(\''+c.key+'\')"':'')+'>'+c.label+(cmpSort.key===c.key?(cmpSort.dir===1?' ▲':' ▼'):'')+'</th>').join('')+'</tr>';
+  let body = rows.map(r=>{
+    let tds = '<td><b>'+r.n+'</b></td>';
+    for(const c of cols){ if(c.key==='nm') continue;
+      if(c.badge){
+        const s = computeSemaforo(r.n);
+        const label = s.color==='g'?'Bien':(s.color==='a'?'Atención':'Riesgo');
+        tds += '<td class="r"><span class="badge '+s.color+'">'+label+'</span></td>';
+      } else if(c.bar){
+        const max = c.max(); const pct = max? Math.round(r[c.key]/max*100):0;
+        const good = c.statusHigh===undefined? true : (c.statusHigh? r[c.key]>=teamAvgMetric(c.key) : r[c.key]<=teamAvgMetric(c.key));
+        const color = c.statusHigh===undefined ? 'var(--teal)' : (good?'var(--green2)':(pct>70?'var(--red)':'var(--amber)'));
+        tds += '<td class="r"><div class="cellbar"><div class="f" style="width:'+pct+'%;background:'+color+'"></div><div class="t">'+c.fmt(r[c.key])+'</div></div></td>';
+      } else {
+        tds += '<td class="r">'+(c.fmt?c.fmt(r[c.key]):r[c.key])+'</td>';
+      }
+    }
+    return '<tr onclick="selByName(\''+r.n+'\')">'+tds+'</tr>';
+  }).join('');
+  document.getElementById('cmpTable').innerHTML = thead+body;
+}
+function teamAvgMetric(key){ return ADVNAMES.reduce((s,n)=>s+cmpMetric(n,key),0)/ADVNAMES.length; }
+function sortCmp(key){ if(cmpSort.key===key) cmpSort.dir*=-1; else cmpSort={key,dir:-1}; renderComparativa(); }
+function toggleMethod(){
+  const box = document.getElementById('methodBox');
+  box.classList.toggle('hidden');
+  box.innerHTML = 'El <b>Estado</b> combina: conversión compromiso→ganada frente a la media del equipo (40%), porcentaje de cartera con 60+ días sin movimiento (40%) y ritmo de cumplimiento del bono trimestral (20%). "Estancadas 60d+" cuenta operaciones en marcha cuyo último cambio de etapa (MOVED_TIME en Bitrix) tiene 60 días o más.';
+}
+
+// ---------- alerts ----------
+function renderAlerts(){
+  const alerts = computeAlerts();
+  const el = document.getElementById('alertList');
+  if(!alerts.length){ el.innerHTML = '<div class="alertitem g"><span>✅ Sin alertas relevantes hoy.</span></div>'; return; }
+  el.innerHTML = alerts.slice(0,6).map(a=>'<div class="alertitem '+a.sev+'" data-idx="'+a.idx+'"><span>'+(a.sev==='r'?'🔴':(a.sev==='a'?'🟡':'🟢'))+'</span><span><b>'+a.title+'</b>'+a.text+'</span></div>').join('');
+  el.querySelectorAll('.alertitem').forEach(node=>{
+    const idx = node.dataset.idx; if(idx===undefined) return;
+    node.onclick = ()=> alerts[idx].onClick && alerts[idx].onClick();
+  });
+}
+function computeAlerts(){
+  const out = [];
+  let idx=0;
+  // 1. deals stuck a long time (>=120 days) — worst offenders
+  const veryOld = [];
+  for(const n of ADVNAMES) for(const dl of DATA.deals[n]) if(dl.dias>=120) veryOld.push(dl);
+  veryOld.sort((a,b)=>b.dias-a.dias);
+  for(const dl of veryOld.slice(0,3)){
+    out.push({sev:'r', idx: idx++, title: dl.advisor+': operación parada '+dl.dias+' días — ', text: '"'+dl.n+'" ('+dl.st+', '+eur(dl.h)+') sin avanzar. Revisar si sigue viva o archivarla.', onClick:()=>openDealsModal('Operaciones muy antiguas de '+dl.advisor, DATA.deals[dl.advisor].filter(x=>x.dias>=90))});
+  }
+  // 2. advisor with cluster of stuck deals (systemic)
+  for(const n of ADVNAMES){
+    const ds = DATA.deals[n]; const stuck = ds.filter(x=>x.dias>=90);
+    if(stuck.length>=5){
+      const sumH = stuck.reduce((s,x)=>s+x.h,0);
+      out.push({sev:'a', idx: idx++, title: n+': '+stuck.length+' operaciones paradas 90+ días — ', text: eur(sumH)+' en honorarios sin moverse. Revisar su cartera esta semana antes de asignarle más leads.', onClick:()=>openDealsModal('Operaciones paradas 90+ días de '+n, stuck)});
+    }
+  }
+  // 3. bono en riesgo (solo si el trimestre lleva avance suficiente para ser significativo, >15% del tiempo transcurrido)
+  const mf = monthFraction();
+  const currQ = DATA.QUARTERS[DATA.QUARTERS.length-1];
+  const monthsInQElapsed = DATA.history.filter(h=>Math.ceil(h.m/3)===currQ.q && h.y===currQ.y).length;
+  const qFraction = ((monthsInQElapsed-1) + mf)/3;
+  if(qFraction > 0.15){
+    for(const n of ADVNAMES){ if(n==='Kelvin') continue;
+      const bp = bonoProgress(n);
+      if(bp && bp.gapQ>0){
+        const expected = BONO_Q*qFraction;
+        if(bp.q < expected*0.6){
+          out.push({sev:'r', idx: idx++, title: n+': bono trimestral en riesgo — ', text: 'lleva '+eur(bp.q)+' de 30.000 € con el '+Math.round(qFraction*100)+'% del trimestre pasado (debería llevar ~'+eur(expected)+').', onClick:()=>selByName(n)});
+        }
+      }
+    }
+  }
+  // 4. lead imbalance
+  const avgComp = teamAvg('compGan');
+  const totalLeads = ADVNAMES.reduce((s,n)=>s+DATA.stageSummary[n].canal.Lead,0);
+  for(const n of ADVNAMES){
+    const leadShare = DATA.stageSummary[n].canal.Lead/(totalLeads||1);
+    const conv = DATA.conversion[n];
+    if(leadShare>0.30 && stuckCount(n,90)>=5){
+      out.push({sev:'a', idx: idx++, title: n+': recibe muchos leads propios pero tiene cuello de botella — ', text: Math.round(leadShare*100)+'% de todos los leads del equipo van a '+n+', que además tiene '+stuckCount(n,90)+' operaciones paradas. Antes de darle más volumen, ayúdale a destascar su cartera.', onClick:()=>selByName(n)});
+    }
+    if(leadShare<0.12 && conv.compGan>=avgComp+5 && conv.won+conv.tras>=8){
+      out.push({sev:'g', idx: idx++, title: n+': convierte por encima de la media pero recibe pocos leads — ', text: 'cierra el '+conv.compGan+'% (media '+avgComp.toFixed(1)+'%) pero solo recibe el '+Math.round(leadShare*100)+'% de los leads propios del equipo. Podría asumir más volumen.', onClick:()=>selByName(n)});
+    }
+  }
+  const sevOrder={r:0,a:1,g:2};
+  out.sort((a,b)=>sevOrder[a.sev]-sevOrder[b.sev]);
+  out.forEach((a,i)=>a.idx=i);
+  return out;
+}
+
+// ---------- weekly priorities ----------
+function renderPriorities(){
+  const list = computePriorities();
+  const el = document.getElementById('prioList');
+  el.innerHTML = list.map((p,i)=>'<div class="prio" data-idx="'+i+'"><span class="rank">'+(i+1)+'</span><span class="body"><span class="ttl">'+p.title+'</span><span class="sub">'+p.sub+'</span></span><span class="val">'+p.val+'</span></div>').join('');
+  el.querySelectorAll('.prio').forEach(node=>{ const i=node.dataset.idx; node.onclick=()=>list[i].onClick&&list[i].onClick(); });
+}
+function computePriorities(){
+  const out=[];
+  // quick wins: FEIN/Aprobado ready to bill, newest first isn't the point — highest honorarios first
+  const quick=[]; for(const n of ADVNAMES) for(const d of DATA.deals[n]) if(d.stKey==='fein'||d.stKey==='aprob') quick.push(d);
+  quick.sort((a,b)=>b.h-a.h);
+  for(const d of quick.slice(0,2)) out.push({title:'Cobrar: '+d.n, sub:d.advisor+' · '+d.st+' · '+d.dias+' días en la etapa', val:eur(d.h), score:d.h*2, onClick:()=>openDealsModal(d.advisor+' — '+d.st, [d])});
+  // worst stagnation by value*age
+  const all=[]; for(const n of ADVNAMES) for(const d of DATA.deals[n]) if(d.dias>=90) all.push(d);
+  all.sort((a,b)=>(b.h*b.dias)-(a.h*a.dias));
+  for(const d of all.slice(0,2)) out.push({title:'Destrabar: '+d.n, sub:d.advisor+' · '+d.st+' · '+d.dias+' días parada', val:eur(d.h), score:d.h*d.dias, onClick:()=>openDealsModal(d.advisor+' — operaciones antiguas', DATA.deals[d.advisor].filter(x=>x.dias>=60))});
+  // systemic: advisor with the biggest cluster of stuck deals (only add if not already dominating list)
+  let worstAdv=null, worstSum=0;
+  for(const n of ADVNAMES){ const stuck=DATA.deals[n].filter(x=>x.dias>=90); const sum=stuck.reduce((s,x)=>s+x.h,0); if(stuck.length>=4 && sum>worstSum){ worstSum=sum; worstAdv={n, count:stuck.length, sum}; } }
+  if(worstAdv) out.push({title:'Revisar cartera de '+worstAdv.n, sub:worstAdv.count+' operaciones paradas 90+ días', val:eur(worstAdv.sum), score:worstAdv.sum*1.5, onClick:()=>openDealsModal('Cartera estancada de '+worstAdv.n, DATA.deals[worstAdv.n].filter(x=>x.dias>=60))});
+  // embudo: asesoramiento stuck
+  const e = DATA.embudo.asesor.items.filter(x=>x.dias>=45);
+  if(e.length>=5) out.push({title:'Retomar '+e.length+' "asesoramiento realizado" antiguos', sub:'45+ días sin pasar a encargo', val:'', score:e.length*800, onClick:()=>openDealsModal('Asesoramiento realizado (45+ días)', e.map(x=>({...x,st:'Asesoramiento'})))});
+  out.sort((a,b)=>b.score-a.score);
+  return out.slice(0,5);
+}
+
+// ---------- drill-down modal ----------
+function openDealsModal(title, deals){
+  deals = [...deals].sort((a,b)=>(b.dias||0)-(a.dias||0));
+  const totalH = deals.reduce((s,d)=>s+(d.h||0),0);
+  const rows = deals.length ? deals.map(d=>{
+    const ageBad = d.dias==null? '' : (d.dias>=90?'style="background:#f6d6d1;color:#7a2418"':(d.dias>=45?'style="background:#fbe9cb;color:#8a5a00"':'style="background:#e3edcf;color:#4e6019"'));
+    return '<tr><td>'+(d.n||'—')+(d.advisor&&title.indexOf(d.advisor)<0?' <span style="color:var(--muted);font-size:11px">('+d.advisor+')</span>':'')+'</td><td class="r">'+(d.h?eur(d.h):'—')+'</td><td class="r">'+(d.st||d.tipo||'')+'</td><td class="r">'+(d.dias!=null?'<span class="agebad" '+ageBad+'>'+d.dias+'d</span>':'—')+'</td></tr>';
+  }).join('') : '<tr><td colspan="4" style="color:var(--muted)">Sin operaciones en este grupo.</td></tr>';
+  const html = '<div class="modal-bg" onclick="if(event.target===this) closeModal()"><div class="modal">'+
+    '<button class="close" onclick="closeModal()">✕</button>'+
+    '<h3>'+title+'</h3>'+
+    '<p class="mdesc">'+deals.length+' operaciones · '+eur(totalH)+' en honorarios · ordenadas por días sin moverse</p>'+
+    '<table><tr><th>Operación</th><th class="r">Honorarios</th><th class="r">Etapa</th><th class="r">Días</th></tr>'+rows+'</table>'+
+    '</div></div>';
+  document.getElementById('modalRoot').innerHTML = html;
+}
+function closeModal(){ document.getElementById('modalRoot').innerHTML=''; }
 </script>
 </body></html>
