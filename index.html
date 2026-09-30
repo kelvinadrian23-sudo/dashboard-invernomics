@@ -138,18 +138,10 @@ td.r,th.r{text-align:right}
 .albody{flex:1;min-width:0}
 .resolvebtn{margin-left:auto;flex:none;background:none;border:1px solid currentColor;border-radius:6px;width:22px;height:22px;font-size:12px;line-height:1;cursor:pointer;color:inherit;opacity:.7}
 .resolvebtn:hover{opacity:1}
-.notecard{background:var(--card2);border:1px solid var(--border);border-radius:8px;padding:8px 10px}
-.notetxt{font-size:12.5px;color:var(--ink);white-space:pre-wrap}
-.notemeta{font-size:10.5px;color:var(--muted2);margin-top:4px;display:flex;justify-content:space-between;gap:8px}
-.notedel{cursor:pointer;text-decoration:underline;flex:none}
-.notedel:hover{color:var(--red-text)}
-.notebtn{background:var(--lima);color:var(--navy2);border:none;border-radius:8px;padding:6px 14px;font-size:12px;font-weight:700;cursor:pointer}
-.notebtn:hover{filter:brightness(1.08)}
-#noteInput{width:100%;background:var(--bg2);border:1px solid var(--border);border-radius:8px;color:var(--ink);padding:8px;font-family:inherit;font-size:13px;resize:vertical}
 .toast{position:fixed;bottom:18px;left:50%;transform:translateX(-50%) translateY(20px);background:var(--card2);border:1px solid var(--border);color:var(--ink);padding:10px 16px;border-radius:10px;font-size:13px;opacity:0;pointer-events:none;transition:.2s;box-shadow:0 6px 20px rgba(0,0,0,.4);z-index:100;max-width:80vw;text-align:center}
 .toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
 @media print{
-  .pdfbtn,.resolvebtn,#noteInput,.notebtn,.methodlink,.toast{display:none!important}
+  .pdfbtn,.resolvebtn,.methodlink,.toast{display:none!important}
   body{-webkit-print-color-adjust:exact;print-color-adjust:exact}
   .card,.row{break-inside:avoid}
 }
@@ -189,14 +181,6 @@ td.r,th.r{text-align:right}
 <h2>📈 Evolución del estado <span id="trendScope" style="font-weight:400;color:var(--muted);font-size:12px"></span></h2>
 <p class="desc">Puntuación de semáforo (0-100) registrada cada vez que se abre el dashboard con datos nuevos.</p>
 <div class="chartbox" style="height:170px"><canvas id="trendChart"></canvas></div>
-</div>
-
-<div class="card hidden" id="notesCard">
-<h2>📝 Notas de gestión — <span id="notesAdvName"></span></h2>
-<p class="desc">Apuntes de seguimiento, 1:1 y compromisos pendientes. Se guardan en este Artifact.</p>
-<textarea id="noteInput" placeholder="Escribe una nota de seguimiento..." rows="2"></textarea>
-<div style="display:flex;justify-content:flex-end;margin-top:6px"><button class="notebtn" onclick="addNote()">Guardar nota</button></div>
-<div id="notesList" style="margin-top:10px;display:flex;flex-direction:column;gap:8px"></div>
 </div>
 
 <div class="row" style="margin-top:14px">
@@ -245,6 +229,7 @@ td.r,th.r{text-align:right}
 <span class="pill active" data-p="mensual" onclick="selP(this)">Mensual</span>
 <span class="pill" data-p="trimestral" onclick="selP(this)">Trimestral</span>
 <span class="pill" data-p="semestral" onclick="selP(this)">Semestral</span>
+<span class="pill" data-p="anual" onclick="selP(this)">Anual</span>
 <span style="flex:1"></span>
 <span class="histctl" id="histCtl">
 <span class="pill sm active" data-h="6" onclick="selH(this)">6m</span>
@@ -278,7 +263,7 @@ td.r,th.r{text-align:right}
 </div>
 </div>
 
-<p class="note">Datos de Bitrix24 (categoría principal). "En marcha" = Nota de encargo, Revisión de bancos, Aprobados por bancos y FEIN firmada. Embudo previo y conversión son globales (y por asesor en la comparativa). Bono trimestral 30.000 € / semestral 50.000 € por asesor. Se actualiza automáticamente cada mañana — el diseño no cambia, solo los datos (data.json). Las notas de gestión, las alertas resueltas y el histórico de tendencia se guardan en este Artifact y no están disponibles en la copia publicada como web pública.</p>
+<p class="note">Datos de Bitrix24 (categoría principal). "En marcha" = Nota de encargo, Revisión de bancos, Aprobados por bancos y FEIN firmada. Embudo previo y conversión son globales (y por asesor en la comparativa). Bono trimestral 30.000 € / semestral 50.000 € por asesor. Se actualiza automáticamente cada mañana — el diseño no cambia, solo los datos (data.json). Las alertas resueltas y el histórico de tendencia se guardan en este Artifact y no están disponibles en la copia publicada como web pública.</p>
 
 </div>
 
@@ -297,7 +282,6 @@ const BONO_Q=30000, BONO_S=50000;
 let stageChart, canalChart, monthChart, trendChart;
 let DB = null;
 let resolvedKeys = new Set(), resolvedDocsCache = {}, lastAlertsByKey = {};
-let notesCache = {};
 let snapshotHistory = null;
 
 async function useCapability(name){
@@ -313,15 +297,12 @@ function toast(msg){
   clearTimeout(window.__toastTimer);
   window.__toastTimer = setTimeout(()=>t.classList.remove('show'), 3500);
 }
-function escapeHtml(s){ return String(s).replace(/[&<>"']/g, c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
-function fmtDate(ms){ const d=new Date(ms); return d.toLocaleDateString('es-ES',{day:'2-digit',month:'short'})+' '+d.toLocaleTimeString('es-ES',{hour:'2-digit',minute:'2-digit'}); }
 function isoFromDMY(s){ const [d,m,y]=s.split('/'); return y+'-'+m+'-'+d; }
 
 async function initCapabilities(){
   DB = await useCapability('db');
   if(!DB){
     renderAlerts();
-    renderNotes(cur);
     return;
   }
   try{
@@ -333,54 +314,7 @@ async function initCapabilities(){
     });
   }catch(e){ /* keep going without resolved state */ }
   renderAlerts();
-  renderNotes(cur);
   await saveSnapshotAndTrend();
-}
-
-// ---------- notas de gestion ----------
-async function renderNotes(a){
-  const card = document.getElementById('notesCard');
-  if(a==='Todos'){ card.classList.add('hidden'); return; }
-  card.classList.remove('hidden');
-  document.getElementById('notesAdvName').textContent = a;
-  const list = document.getElementById('notesList');
-  if(!DB){ list.innerHTML = '<div class="caveat">Las notas se guardan en el Artifact de Claude &mdash; abre el dashboard desde ese enlace (no la web publica) para verlas y anadirlas.</div>'; return; }
-  list.innerHTML = '<div class="caveat">Cargando notas&hellip;</div>';
-  try{
-    const snap = await DB.collection('notes').where('advisor','==',a).orderBy('tsMs','desc').limit(20).get();
-    notesCache[a] = snap.docs.map(d=>Object.assign({id:d.id}, d.data()));
-  }catch(e){ list.innerHTML = '<div class="caveat">No se pudieron cargar las notas ahora mismo.</div>'; return; }
-  renderNotesList(a);
-}
-function renderNotesList(a){
-  const list = document.getElementById('notesList');
-  const notes = notesCache[a]||[];
-  if(!notes.length){ list.innerHTML = '<div class="caveat">Aun no hay notas para '+a+'.</div>'; return; }
-  list.innerHTML = notes.map(function(n){
-    return '<div class="notecard"><div class="notetxt">'+escapeHtml(n.text)+'</div><div class="notemeta"><span>'+fmtDate(n.tsMs)+'</span><span class="notedel" data-a="'+a+'" data-id="'+n.id+'" onclick="deleteNote(this.dataset.a,this.dataset.id)">eliminar</span></div></div>';
-  }).join('');
-}
-async function addNote(){
-  const ta = document.getElementById('noteInput'); const text = ta.value.trim();
-  if(!text) return;
-  if(!DB){ toast('No se puede guardar: abre el dashboard desde el enlace del Artifact para usar las notas.'); return; }
-  const a = cur;
-  try{
-    const ref = await DB.collection('notes').add({advisor:a, text:text, tsMs:Date.now(), ts:new Date().toISOString()});
-    ta.value = '';
-    notesCache[a] = notesCache[a]||[];
-    notesCache[a].unshift({id:ref.id, advisor:a, text:text, tsMs:Date.now()});
-    renderNotesList(a);
-    toast('Nota guardada.');
-  }catch(e){ toast('No se pudo guardar la nota (sin permisos o sin conexion).'); }
-}
-async function deleteNote(a, id){
-  if(!DB) return;
-  try{
-    await DB.doc('notes/'+id).delete();
-    notesCache[a] = (notesCache[a]||[]).filter(function(n){ return n.id!==id; });
-    renderNotesList(a);
-  }catch(e){ toast('No se pudo eliminar la nota.'); }
 }
 
 // ---------- historial de semaforo / tendencia ----------
@@ -593,7 +527,6 @@ function build(a){
   renderConversion(a);
   renderEmbudo();
   renderFac();
-  renderNotes(a);
   renderTrend(a);
 }
 function monthShort(m){ return ['','ene','feb','mar','abr','may','jun','jul','ago','sep','oct','nov','dic'][m]; }
@@ -685,6 +618,24 @@ function renderEmbudo(){
 }
 
 // ---------- facturación ----------
+function groupHistoryBy(a, unit){
+  // unit: 'q' trimestre (3 meses), 's' semestre (6 meses), 'y' año natural (12 meses)
+  const size = unit==='y' ? 12 : (unit==='s' ? 6 : 3);
+  const groups = {}, order = [];
+  DATA.history.forEach(h=>{
+    let key, label, idx;
+    if(unit==='y'){ idx = 0; key = ''+h.y; label = ''+h.y; }
+    else { idx = Math.floor((h.m-1)/size); const per = idx+1; key = h.y+'-'+unit+per; label = (unit==='q'?'Q':'S')+per+' '+String(h.y).slice(2); }
+    if(!groups[key]){ groups[key] = {l:label, v:0, curr:false, months:0, ord: h.y*12+idx*size}; order.push(key); }
+    groups[key].v += (a==='Todos' ? h.total : (h.byAdvisor[a]||0));
+    groups[key].months += 1;
+    if(h.curr) groups[key].curr = true;
+  });
+  let periods = order.map(k=>groups[k]).sort((x,y)=>x.ord-y.ord);
+  // descarta el primer periodo si es un fragmento minúsculo del histórico disponible (no un periodo real cerrado)
+  if(periods.length>1 && !periods[0].curr && periods[0].months < size*0.5) periods = periods.slice(1);
+  return periods;
+}
 function renderFac(){
   const a = cur, d = DATA.stageSummary[a];
   const scope = document.getElementById('fac_scope'), desc = document.getElementById('fac_desc');
@@ -708,24 +659,25 @@ function renderFac(){
     note = 'Media de los '+closedVals.length+' meses cerrados: <b>'+eur(avg)+'</b>'+(a==='Todos'?' · objetivo 50.000 €':'')+'. '+curr.label+' va por el día '+elapsed+' de '+totalD+' y lleva '+eur(facMes)+', con <b>techo '+eur(facMes+pend)+'</b> si cobra lo pendiente. ';
     if(a==='Todos' && pend>0) note += 'Tip: hay <b>'+eur(pend)+'</b> en FEIN y aprobados esperando a facturarse.';
     if(curHist>=12) document.getElementById('fac_caveat').classList.remove('hidden');
-  } else if(curP==='trimestral'){
-    scope.textContent = 'trimestral — equipo';
-    desc.textContent = 'Honorarios del equipo por trimestre contable (último en curso).';
-    labels = DATA.QUARTERS.map(q=>q.l); vals = DATA.QUARTERS.map(q=>q.v);
-    ds = [{label:'Honorarios', data:vals, backgroundColor:DATA.QUARTERS.map(q=>q.curr?LIMA:STEEL), borderRadius:6}];
-    const closed = DATA.QUARTERS.filter(q=>!q.curr);
-    const last = closed[closed.length-1], prev = closed[closed.length-2];
-    const currQ = DATA.QUARTERS[DATA.QUARTERS.length-1];
-    note = last ? (last.l+' cerró completo en <b>'+eur(last.v)+'</b>'+(prev?', '+(last.v>=prev.v?'por encima':'por debajo')+' del '+prev.l+' (<b>'+eur(prev.v)+'</b>)':'')+'. '+currQ.l+' acaba de empezar: lleva <b>'+eur(currQ.v)+'</b>.') : '';
   } else {
-    scope.textContent = 'semestral — equipo';
-    desc.textContent = 'Honorarios del equipo por semestre contable (último en curso).';
-    labels = DATA.SEMESTERS.map(s=>s.l); vals = DATA.SEMESTERS.map(s=>s.v);
-    ds = [{label:'Honorarios', data:vals, backgroundColor:DATA.SEMESTERS.map(s=>s.curr?LIMA:STEEL), borderRadius:6}];
-    const closed = DATA.SEMESTERS.filter(s=>!s.curr);
+    const unit = curP==='trimestral' ? 'q' : (curP==='semestral' ? 's' : 'y');
+    const noun = unit==='q' ? 'trimestre' : (unit==='s' ? 'semestre' : 'año');
+    const periods = groupHistoryBy(a, unit);
+    scope.textContent = curP+' — '+(a==='Todos'?'equipo':a);
+    desc.textContent = 'Honorarios'+(a==='Todos'?' del equipo':' de '+a)+' por '+noun+' contable'+(unit!=='y'?' (último en curso)':'')+'.';
+    labels = periods.map(p=>p.l); vals = periods.map(p=>p.v);
+    ds = [{label:'Honorarios', data:vals, backgroundColor:periods.map(p=>p.curr?LIMA:STEEL), borderRadius:6}];
+    const closed = periods.filter(p=>!p.curr);
     const last = closed[closed.length-1], prev = closed[closed.length-2];
-    const currS = DATA.SEMESTERS[DATA.SEMESTERS.length-1];
-    note = last ? (last.l+' cerró en <b>'+eur(last.v)+'</b>'+(prev?(last.v>=prev.v?', un <b>+'+Math.round((last.v/prev.v-1)*100)+'%</b> por encima del semestre anterior ('+prev.l+': '+eur(prev.v)+')':', por debajo del semestre anterior ('+prev.l+': '+eur(prev.v)+')'):'')+'. '+currS.l+' acaba de empezar: lleva <b>'+eur(currS.v)+'</b>.') : '';
+    const currPer = periods[periods.length-1];
+    if(last){
+      const pct = (prev && prev.v) ? Math.round((last.v/prev.v-1)*100) : null;
+      note = last.l+' cerró'+(unit!=='y'?' completo':'')+' en <b>'+eur(last.v)+'</b>';
+      if(prev) note += last.v>=prev.v ? (pct!=null?', un <b>+'+pct+'%</b> por encima del '+noun+' anterior':', por encima del '+noun+' anterior')+' ('+prev.l+': '+eur(prev.v)+')' : ', por debajo del '+noun+' anterior ('+prev.l+': '+eur(prev.v)+')';
+      note += '. ';
+      if(currPer && currPer.curr) note += currPer.l+' va en curso: lleva <b>'+eur(currPer.v)+'</b>.';
+    }
+    document.getElementById('fac_caveat').classList.remove('hidden');
   }
   if(monthChart) monthChart.destroy();
   monthChart = new Chart(document.getElementById('monthChart'), {type:'bar',
