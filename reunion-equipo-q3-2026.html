@@ -228,8 +228,8 @@ slides.push(`
 <div class="slide cover">
   <div class="logo" style="position:absolute;top:4vh;right:5vw">${LOGO_LIGHT}</div>
   <span class="chip">Reunión trimestral</span>
-  <h1>Q3 en la<br>recta final</h1>
-  <div class="sub">Julio y agosto sobre la mesa · Septiembre lo decide · 198.000 € a punto de cerrar</div>
+  <h1>Q3 cerrado.<br>Ahora, el banco.</h1>
+  <div class="sub">24 operaciones · 101.500 € · +9,7% vs Q2 · 194.000 € esperando en banco/FEIN</div>
 </div>`);
 
 /* 1 — AGENDA */
@@ -237,12 +237,12 @@ slides.push(`
 <div class="slide">
   ${head('Cómo va la sesión','Agenda de hoy')}
   <div class="agenda">
-    <div class="arow"><span class="dot"></span><span class="txt">Apertura — dónde estamos a 1 de septiembre</span></div>
-    <div class="arow hl"><span class="dot"></span><span class="txt">Los números: julio y agosto, y lo que queda por delante</span></div>
+    <div class="arow"><span class="dot"></span><span class="txt">Apertura — el Q3 cerrado: lo que salió bien</span></div>
+    <div class="arow hl"><span class="dot"></span><span class="txt">Los números del trimestre — y lo que nos enseñó septiembre</span></div>
     <div class="arow"><span class="dot"></span><span class="txt">El ticket medio — la palanca que menos cuesta</span></div>
     <div class="arow"><span class="dot"></span><span class="txt">De dónde vienen los cierres — análisis por canal</span></div>
     <div class="arow hl"><span class="dot"></span><span class="txt">El caso de hoy — diversificar y no desaprovechar oportunidades</span></div>
-    <div class="arow"><span class="dot"></span><span class="txt">Septiembre y objetivo de equipo para Q4</span></div>
+    <div class="arow"><span class="dot"></span><span class="txt">Objetivo de equipo para Q4</span></div>
     <div class="arow"><span class="dot"></span><span class="txt">Cierre y próximos pasos</span></div>
   </div>
   ${foot('1')}
@@ -253,7 +253,7 @@ slides.push(`
 <div class="slide divider">
   <div class="n">01</div>
   <h1>Resultados del equipo</h1>
-  <p style="color:#DDE8B0;font-size:1.6vw;margin-top:2vh">Los números del equipo, en conjunto · julio y agosto 2026</p>
+  <p style="color:#DDE8B0;font-size:1.6vw;margin-top:2vh">Los números del equipo, en conjunto · julio, agosto y septiembre 2026</p>
 </div>`);
 
 /* 3 — HEADLINE METRICS */
@@ -261,16 +261,16 @@ slides.push(`
 <div class="slide">
   ${head('La foto del trimestre','Facturación equipo — todos incluidos')}
   <div class="grid">
-    <div class="card"><div class="lab">Facturación jul + ago</div><div class="val">85.500<span style="font-size:1.6vw"> €</span></div><div class="delta muted">20 operaciones · queda septiembre</div></div>
-    <div class="card good"><div class="lab">Ticket medio</div><div class="val">4.275<span style="font-size:1.6vw"> €</span></div><div class="delta up">▲ vs Q2 (4.205 €) — el mejor del año</div></div>
-    <div class="card good"><div class="lab">Pipeline inminente</div><div class="val big-lime">198.000<span style="font-size:1.6vw"> €</span></div><div class="delta up">▲ récord · 43 operaciones en banco/FEIN</div></div>
+    <div class="card good"><div class="lab">Facturación Q3</div><div class="val">101.500<span style="font-size:1.6vw"> €</span></div><div class="delta up">▲ +9,7% vs Q2 (92.500 €) · 24 operaciones</div></div>
+    <div class="card"><div class="lab">Ticket medio</div><div class="val">4.229<span style="font-size:1.6vw"> €</span></div><div class="delta muted">Q2: 4.205 € · Q1: 4.279 €</div></div>
+    <div class="card good"><div class="lab">Pipeline inminente</div><div class="val big-lime">194.000<span style="font-size:1.6vw"> €</span></div><div class="delta up">43 operaciones en banco/FEIN</div></div>
   </div>
-  <div class="note ok"><b>En dos meses llevamos el 92% de lo que facturamos en todo el Q2</b> (85.500 € de 92.500 €), con el ticket medio más alto del año. Y todavía queda septiembre.</div>
-  <div class="note key"><b>Lo importante está delante:</b> 43 operaciones en banco o con FEIN firmada, por <b>198.000 €</b>. Es la mayor cartera avanzada que hemos tenido nunca. Septiembre no depende de captar más — depende de cerrar lo que ya está en la mano.</div>
+  <div class="note ok"><b>Superamos el Q2 en facturación y en operaciones:</b> 24 cierres y 101.500 €. Julio (47.000 €) y agosto (38.500 €) fueron dos de los mejores meses del año.</div>
+  <div class="note warn"><b>Lo que nos enseñó septiembre:</b> nos marcamos superar los 120.000 € y nos quedamos en 101.500 €. Septiembre cerró en 16.000 € y la cartera en banco sigue en 43 expedientes, igual que hace un mes. <b>Lo que tenemos en el banco no está llegando a firma al ritmo que entra.</b></div>
   ${foot('2')}
 </div>`);
 
-/* 4 — CHART Q1 vs Q2 (interactive toggle) */
+/* 4 — CHART (interactive toggle) */
 slides.push(`
 <div class="slide">
   ${head('Facturación equipo','Evolución del equipo — elige la vista')}
@@ -291,32 +291,32 @@ slides.push(`
   <div class="two">
     <div>
       <div class="grid" style="flex-direction:column">
-        <div class="card"><div class="lab">Ticket medio actual (jul+ago)</div><div class="val">4.275 €</div><div class="delta up">Q2: 4.205 € · Q1: 4.279 €</div></div>
+        <div class="card"><div class="lab">Ticket medio Q3</div><div class="val">4.229 €</div><div class="delta up">Q2: 4.205 € · Q1: 4.279 €</div></div>
         <div class="card good"><div class="lab">Objetivo de equipo</div><div class="val big-lime">5.000 €</div><div class="delta up">por operación cerrada</div></div>
       </div>
     </div>
     <div>
-      <div class="note key"><b>El impacto en un año:</b> llevamos <b>70 operaciones en 2026</b> (~100 al año a este ritmo):<br>
-      · Con ticket medio de 4.275 €: <b>≈ 427.000 €/año</b><br>
+      <div class="note key"><b>El impacto en un año:</b> llevamos <b>74 operaciones en 2026</b> (~100 al año a este ritmo):<br>
+      · Con ticket medio de 4.229 €: <b>≈ 423.000 €/año</b><br>
       · Con ticket medio de 5.000 €: <b>≈ 500.000 €/año</b><br>
-      <b>+73.000 €/año — sin cerrar ni una operación más.</b> Solo subiendo unos 725 € el valor medio de cada expediente.</div>
-      <div class="note ok"><b>Vamos en la dirección correcta:</b> 4.279 € → 4.205 € → 4.275 €. El ticket lleva todo el año pegado a los 4.200–4.300 €. Romper esa barrera es la palanca más barata que tenemos: no exige más leads ni más horas, exige elegir mejor las operaciones y defender los honorarios.</div>
+      <b>+77.000 €/año — sin cerrar ni una operación más.</b> Solo subiendo unos 770 € el valor medio de cada expediente.</div>
+      <div class="note ok"><b>Tres trimestres pegados a los 4.200–4.300 €.</b> Y el mercado nos da argumentos: el euríbor cerró septiembre en el <b>3,25%</b>, su máximo en dos años (+1,1 puntos en un año). Con las cuotas subiendo, encajar una operación cuesta más — es justo cuando más vale un buen asesor y cuando más fácil es defender los honorarios.</div>
     </div>
   </div>
   ${foot('4')}
 </div>`);
 
-/* 6 — PIPELINE Q3 */
+/* 6 — PIPELINE Q4 */
 slides.push(`
 <div class="slide">
-  ${head('Lo que viene','El Q3 arranca medio escrito')}
+  ${head('Lo que viene','El Q4 arranca con 194.000 € en el banco')}
   <div class="grid">
-    <div class="card good"><div class="lab">Pipeline inminente</div><div class="val big-lime">198.000 €</div><div class="delta up">43 operaciones en banco / FEIN</div></div>
+    <div class="card good"><div class="lab">Pipeline inminente</div><div class="val big-lime">194.000 €</div><div class="delta up">43 operaciones en banco / FEIN</div></div>
     <div class="card"><div class="lab">Expedientes vivos</div><div class="val">129</div><div class="delta muted">cartera total en marcha, todos incluidos</div></div>
-    <div class="card"><div class="lab">Escenario Q3 cerrado</div><div class="val">115–130k<span style="font-size:1.6vw"> €</span></div><div class="delta muted">según lo que convirtamos en septiembre</div></div>
+    <div class="card bad"><div class="lab">Septiembre</div><div class="val">16.000<span style="font-size:1.6vw"> €</span></div><div class="delta muted">4 firmas · la cartera en banco no bajó</div></div>
   </div>
-  <div class="note key"><b>El mensaje:</b> el Q3 se decide en septiembre y no se decide captando. <b>198.000 € ya están en el banco esperando</b>: convertir un tercio de esa cartera nos pone por encima del Q2; convertir la mitad, en el mejor trimestre del año.</div>
-  <div class="note warn"><b>Y el aviso de siempre:</b> mirar a 2–3 meses vista. Aunque septiembre se vaya en cerrar, hay que seguir captando — quedarse sin cartera cuesta 2–3 meses remontarlo, y eso se paga en Q4.</div>
+  <div class="note key"><b>El mensaje:</b> el Q4 ya está medio escrito — pero solo si lo empujamos hasta la firma. Un expediente aprobado que no se firma no factura. <b>Convertir 2 de cada 3 de lo que hay en el banco nos pone en el mejor trimestre de nuestra historia.</b></div>
+  <div class="note warn"><b>Y el aviso de siempre:</b> mirar a 2–3 meses vista. Septiembre fue nuestro mejor mes de captación desde mayo — bien hecho. No cerremos el grifo mientras empujamos el banco: quedarse sin cartera cuesta 2–3 meses remontarlo.</div>
   ${foot('5')}
 </div>`);
 
@@ -333,15 +333,15 @@ slides.push(`
 <div class="slide">
   ${head('Análisis por canal','Conversión histórica: qué % de leads acaba en operación')}
   <div class="hbars">
-    <div class="hrow"><span class="name">Referido Jorge</span><div class="htrack"><div class="hfill" style="--w:100%"></div></div><span class="num">35,0%<span class="vol"> · 80 leads · 28 ops</span></span></div>
-    <div class="hrow"><span class="name">Particular</span><div class="htrack"><div class="hfill" style="--w:71%"></div></div><span class="num">25,0%<span class="vol"> · 44 leads · 11 ops</span></span></div>
-    <div class="hrow"><span class="name">Referido Inmob.</span><div class="htrack"><div class="hfill mid" style="--w:36%"></div></div><span class="num">12,5%<span class="vol"> · 8 leads · 1 op</span></span></div>
-    <div class="hrow"><span class="name">Lead Invernomics</span><div class="htrack"><div class="hfill low" style="--w:18%"></div></div><span class="num">6,4%<span class="vol"> · 1.102 leads · 70 ops</span></span></div>
-    <div class="hrow"><span class="name">Idealista</span><div class="htrack"><div class="hfill low" style="--w:2%"></div></div><span class="num">0,0%<span class="vol"> · 246 leads · 0 ops</span></span></div>
+    <div class="hrow"><span class="name">Referido Jorge</span><div class="htrack"><div class="hfill" style="--w:100%"></div></div><span class="num">34,5%<span class="vol"> · 84 leads · 29 ops</span></span></div>
+    <div class="hrow"><span class="name">Referido Inmob.</span><div class="htrack"><div class="hfill" style="--w:72%"></div></div><span class="num">25,0%<span class="vol"> · 8 leads · 2 ops</span></span></div>
+    <div class="hrow"><span class="name">Particular</span><div class="htrack"><div class="hfill" style="--w:68%"></div></div><span class="num">23,4%<span class="vol"> · 47 leads · 11 ops</span></span></div>
+    <div class="hrow"><span class="name">Lead Invernomics</span><div class="htrack"><div class="hfill low" style="--w:17%"></div></div><span class="num">6,0%<span class="vol"> · 1.201 leads · 72 ops</span></span></div>
+    <div class="hrow"><span class="name">Idealista</span><div class="htrack"><div class="hfill low" style="--w:2%"></div></div><span class="num">0,0%<span class="vol"> · 253 leads · 0 ops</span></span></div>
   </div>
   <div class="note key"><b>Cómo leer la tarjeta:</b> cada barra es el % de leads de ese canal que acaba en operación firmada (histórico). "Lead Invernomics" es la landing web — los leads del formulario se etiquetan así en Bitrix.</div>
-  <div class="note ok"><b>La clave, otra vez:</b> los referidos convierten al 25–35%, pero traen pocos leads (80, 44, 8). <b>Lead Invernomics convierte solo un 6,4%… y aun así es de largo nuestra MAYOR fuente de cierres: 70 operaciones de 1.102 leads.</b> Ahí está el volumen — y ahí está el margen.</div>
-  <div class="note key"><b>Dato del trimestre:</b> 7 de las 8 operaciones más recientes de nuestro mayor cerrador vienen justo de este canal. No es que la landing convierta mal — es que se puede trabajar mejor. Lo vemos hoy.</div>
+  <div class="note ok"><b>La clave, otra vez:</b> los referidos convierten al 23–35%, pero traen pocos leads. <b>Lead Invernomics convierte solo un 6%… y aun así es de largo nuestra MAYOR fuente de cierres: 72 operaciones de 1.201 leads.</b></div>
+  <div class="note key"><b>Dato del trimestre:</b> 15 de las 24 operaciones del Q3 (68.500 €, el 67% de la facturación) vinieron de la landing. Se puede convertir — y se puede convertir mejor.</div>
   ${foot('6')}
 </div>`);
 
@@ -351,17 +351,17 @@ slides.push(`
   ${head('Dónde está la oportunidad','El volumen está en los canales fríos · histórico completo')}
   <div class="two">
     <div>
-      <h3 style="margin-bottom:1.5vh">1.722 leads de canal frío (Lead Invernomics + Idealista + sin origen) = el 92% de todo lo que entra</h3>
+      <h3 style="margin-bottom:1.5vh">1.872 leads de canal frío (Lead Invernomics + Idealista + sin origen) = el 92% de todo lo que entra</h3>
       <div class="funnel">
-        <div class="fseg" style="background:linear-gradient(135deg,#162A41,#2c4b73);width:96%;transition-delay:.1s"><span class="pct">1.722</span><span class="lbl2">leads de canal frío (histórico)</span></div>
-        <div class="fseg" style="background:linear-gradient(135deg,var(--red),#a53326);width:74%;transition-delay:.5s"><span class="pct">281</span><span class="lbl2">murieron en "No contacto", sin una sola conversación</span></div>
-        <div class="fseg" style="background:linear-gradient(135deg,var(--amber),#c9852a);width:56%;transition-delay:.9s"><span class="pct">106</span><span class="lbl2">siguen activos hoy — para trabajar sin captar más</span></div>
-        <div class="fseg" style="background:linear-gradient(135deg,var(--lime),var(--lime-d));width:40%;transition-delay:1.3s"><span class="pct">88</span><span class="lbl2">ya cerrados — la landing es nuestra mayor fuente</span></div>
+        <div class="fseg" style="background:linear-gradient(135deg,#162A41,#2c4b73);width:96%;transition-delay:.1s"><span class="pct">1.872</span><span class="lbl2">leads de canal frío (histórico)</span></div>
+        <div class="fseg" style="background:linear-gradient(135deg,var(--red),#a53326);width:74%;transition-delay:.5s"><span class="pct">304</span><span class="lbl2">murieron en "No contacto", sin una sola conversación</span></div>
+        <div class="fseg" style="background:linear-gradient(135deg,var(--amber),#c9852a);width:56%;transition-delay:.9s"><span class="pct">105</span><span class="lbl2">siguen activos hoy — para trabajar sin captar más</span></div>
+        <div class="fseg" style="background:linear-gradient(135deg,var(--lime),var(--lime-d));width:40%;transition-delay:1.3s"><span class="pct">90</span><span class="lbl2">ya cerrados — la landing es nuestra mayor fuente</span></div>
       </div>
     </div>
     <div>
-      <div class="note warn"><b>"No contacto" sigue siendo el asesino nº1:</b> 285 leads históricos murieron sin que llegáramos a hablar con ellos — <b>144 de Lead Invernomics y 109 de Idealista</b>. Es más que todo lo que hemos cerrado en la historia de la casa.</div>
-      <div class="note ok"><b>La oportunidad:</b> no necesitamos más leads. Subir la conversión de la landing del 6,4% al 7,5% son <b>12 operaciones más al año</b> con el mismo tráfico. Y de Idealista ya sabemos que es frío: la meta no es arreglarlo, es <b>aprovecharlo al mínimo para diversificar</b> y no depender de una sola fuente.</div>
+      <div class="note warn"><b>"No contacto" sigue siendo el asesino nº1:</b> 304 leads históricos murieron sin que llegáramos a hablar con ellos — <b>145 de Lead Invernomics y 110 de Idealista</b>. Es más que todo lo que hemos cerrado en la historia de la casa.</div>
+      <div class="note ok"><b>La oportunidad:</b> no necesitamos más leads. Subir la conversión de la landing del 6% al 7,5% son <b>unas 13 operaciones más al año</b> con el mismo tráfico. Idealista sabemos que es frío (este trimestre entraron 97 leads): la meta no es arreglarlo, es <b>aprovecharlo con una cadencia mínima para diversificar</b> y no depender de una sola fuente.</div>
     </div>
   </div>
   ${foot('7')}
@@ -372,7 +372,7 @@ slides.push(`
 <div class="slide divider">
   <div class="n">03</div>
   <h1>El caso de hoy:<br>diversificar y no desaprovechar</h1>
-  <p style="color:#DDE8B0;font-size:1.6vw;margin-top:2vh">Todos los leads — con foco en Lead Invernomics, el canal con más volumen</p>
+  <p style="color:#DDE8B0;font-size:1.6vw;margin-top:2vh">Todos los leads — y todas las operaciones que ya tenemos en la mano</p>
 </div>`);
 
 /* 11 — CASE FRAMING */
@@ -380,51 +380,45 @@ slides.push(`
 <div class="slide">
   ${head('El reto compartido','Lo trabajamos entre todos')}
   <ul class="clean">
-    <li><b>No es de un canal ni de una persona:</b> es cómo trabajamos el primer contacto y el seguimiento en TODOS los leads.</li>
-    <li><b>Lead Invernomics (landing web):</b> 1.102 leads y 70 cierres — nuestra mayor fuente con diferencia. Convierte al 6,4%: subirlo un punto son varias operaciones más cada trimestre, sin gastar un euro más en captación.</li>
-    <li><b>El cuello de botella de este trimestre está en el banco:</b> 43 expedientes parados entre revisión y FEIN por 198.000 €. Un expediente que lleva 6 semanas sin movimiento no está avanzando: está esperando a que alguien lo empuje.</li>
-    <li><b>Idealista:</b> canal muy frío, 0 cierres históricos. La meta no es arreglarlo del todo, sino <b>aprovecharlo al mínimo para diversificar cartera</b> y no depender de un solo canal.</li>
+    <li><b>No es de un canal ni de una persona:</b> es cómo trabajamos el primer contacto, el seguimiento y el cierre en TODOS los expedientes.</li>
+    <li><b>No desaprovechar lo que ya está aprobado:</b> 43 expedientes en banco/FEIN por 194.000 €. Una operación aprobada que se queda esperando tasación, notaría o la respuesta del cliente es la oportunidad más cara de perder.</li>
+    <li><b>Lead Invernomics (landing web):</b> 1.201 leads y 72 cierres — nuestra mayor fuente con diferencia. Convierte al 6%: subirlo un punto y medio son ~13 operaciones más al año sin gastar un euro más en captación.</li>
+    <li><b>Diversificar:</b> los referidos (Jorge, inmobiliarias, particulares) convierten 4–6 veces más que la landing. Cada referido mal atendido es un canal que se seca. Idealista: cadencia mínima, sin esperar milagros, pero sin tirarlo.</li>
     <li><b>Siempre a 2–3 meses vista:</b> quedarse sin operaciones cuesta 2–3 meses remontarlo. Si tienes mucha cartera que tramitar, capta menos — pero <b>capta siempre</b>; nunca cierres el grifo.</li>
   </ul>
   ${foot('8')}
 </div>`);
 
-
-
-
-
 /* 14 — DIVIDER 4 */
 slides.push(`
 <div class="slide divider">
   <div class="n">04</div>
-  <h1>Septiembre<br>y objetivo Q4</h1>
+  <h1>Objetivo Q4</h1>
   <p style="color:#DDE8B0;font-size:1.6vw;margin-top:2vh">Lo decidimos juntos — es negociable</p>
 </div>`);
 
-/* 15 — OBJETIVO Q3 */
+/* 15 — OBJETIVO Q4 */
 slides.push(`
 <div class="slide">
-  ${head('A por el Q3','Un objetivo realista y ambicioso — todos incluidos')}
+  ${head('A por el Q4','Un objetivo ambicioso y alcanzable — todos incluidos')}
   <div class="grid">
-    <div class="card good"><div class="lab">Cerrar Q3 por encima de</div><div class="val big-lime">&gt; 120.000 €</div><div class="delta up">quedan 34.500 € en septiembre</div></div>
-    <div class="card good"><div class="lab">Objetivo facturación Q4</div><div class="val big-lime">&gt; 135.000 €</div><div class="delta up">todos incluidos · el mejor trimestre del año</div></div>
-    <div class="card"><div class="lab">Las dos palancas</div><div class="val" style="font-size:1.7vw">Convertir el pipeline<br>+ ticket a 5.000 €</div><div class="delta muted">198.000 € inminentes · hoy 4.275 €</div></div>
+    <div class="card good"><div class="lab">Objetivo facturación Q4</div><div class="val big-lime">&gt; 140.000 €</div><div class="delta up">sería el mejor trimestre de nuestra historia</div></div>
+    <div class="card"><div class="lab">Ya en el banco</div><div class="val">194.000 €</div><div class="delta muted">43 operaciones en banco / FEIN</div></div>
+    <div class="card"><div class="lab">Las dos palancas</div><div class="val" style="font-size:1.7vw">Del banco a la firma<br>+ ticket a 5.000 €</div><div class="delta muted">hoy 4.229 € de ticket medio</div></div>
   </div>
-  <div class="note ok"><b>Septiembre, en números:</b> con 85.500 € ya hechos, nos faltan <b>34.500 €</b> para superar los 120.000 €. Eso son 8 operaciones de las 43 que tenemos en banco — menos de una de cada cinco.</div>
+  <div class="note ok"><b>El Q4 en números:</b> 140.000 € son unas 30 operaciones a 4.700 € de media, o 28 a 5.000 €. Nuestro récord es el Q1 2026 (119.800 €, 28 operaciones) — y hoy tenemos más cartera avanzada que entonces.</div>
   <div class="note key"><b>Compromiso de equipo:</b> ¿lo vemos alcanzable? ¿lo subimos, lo ajustamos? Salgamos con un número que todos firmemos.</div>
   ${foot('9')}
 </div>`);
-
-
 
 /* 17 — TAKEAWAYS */
 slides.push(`
 <div class="slide">
   ${head('Con esto nos quedamos','3 mensajes para llevarse a casa')}
   <div style="margin-top:2vh">
-    <div class="takeaway"><div class="k">1</div><p>Septiembre decide el trimestre: 198.000 € ya están en el banco esperando. Toca empujarlos.</p></div>
-    <div class="takeaway"><div class="k">2</div><p>Ningún expediente más de 6 semanas parado en el banco sin que alguien lo mueva.</p></div>
-    <div class="takeaway"><div class="k">3</div><p>Subir el ticket medio a 5.000 € vale +73.000 €/año sin cerrar ni una operación más.</p></div>
+    <div class="takeaway"><div class="k">1</div><p>194.000 € ya están en el banco: el Q4 se gana llevándolos hasta la firma.</p></div>
+    <div class="takeaway"><div class="k">2</div><p>Ningún expediente más de 6 semanas parado en el banco sin una acción registrada.</p></div>
+    <div class="takeaway"><div class="k">3</div><p>Subir el ticket medio a 5.000 € vale +77.000 €/año sin cerrar ni una operación más.</p></div>
   </div>
   ${foot('10')}
 </div>`);
@@ -434,8 +428,8 @@ slides.push(`
 <div class="slide cover">
   <div class="logo" style="position:absolute;top:4vh;right:5vw">${LOGO_LIGHT}</div>
   <span class="chip">Cierre</span>
-  <h1 style="font-size:4vw;text-transform:none">Buen arranque de trimestre.<br>Ahora, septiembre.</h1>
-  <div class="sub" style="margin-top:2vh">Próximos pasos: convertir más el canal Lead Invernomics · desatascar los 43 expedientes en banco · seguimiento en los 1:1</div>
+  <h1 style="font-size:4vw;text-transform:none">Q3 por encima del Q2.<br>Ahora, a por el mejor trimestre.</h1>
+  <div class="sub" style="margin-top:2vh">Próximos pasos: llevar a firma los 43 expedientes en banco · convertir más el canal Lead Invernomics · cuidar los referidos · seguimiento en los 1:1</div>
   <div style="margin-top:5vh;color:#7A97B4;font-size:1.2vw">Contáis conmigo para lo que necesitéis.</div>
 </div>`);
 
@@ -478,12 +472,12 @@ const votes=[0,0,0];
 function vote(el){const opts=[...document.querySelectorAll('#poll1 .opt')];const i=opts.indexOf(el);votes[i]++;const tot=votes.reduce((a,b)=>a+b,0);opts.forEach((o,j)=>{const pc=Math.round(votes[j]/tot*100);o.querySelector('.fillp').style.width=pc+'%';o.querySelector('.pc').textContent=pc+'%';});}
 let curFv='trimestral';
 const FACT={
- mensual:{bars:[['Ene',60000,'q1'],['Feb',17300,'q1'],['Mar',42500,'q1'],['Abr',14300,'q1'],['May',26700,'q1'],['Jun',51500,'q1'],['Jul',47000,'q2'],['Ago',38500,'q2']],
-  note:`<b>Facturación mensual del equipo · 2026.</b> Verde = los dos meses del Q3 en curso. Julio (47.000 €) y agosto (38.500 €) son el <b>mejor arranque de trimestre del año</b>: en Q2 los dos primeros meses sumaron 41.000 €, y este trimestre llevamos 85.500 €. Agosto, además, ha sido el mejor agosto de nuestra historia.`},
- trimestral:{bars:[['Q4 2025 · 20 ops',95600,'q1'],['Q1 2026 · 28 ops',119800,'q1'],['Q2 2026 · 22 ops',92500,'q1'],['Q3 2026 · 20 ops · 2 meses',85500,'q2']],
-  note:`<b>El equipo al completo</b> (Flor, Facundo, Isled, David y Kelvin): 95.600 € → 119.800 € → 92.500 € → <b>85.500 € con solo dos meses contados</b>. La barra verde está incompleta: le falta septiembre. Con 34.500 € más superamos el Q2, y con lo que hay en banco es perfectamente alcanzable.`},
- semestral:{bars:[['S1 2025',77200,'q1'],['S2 2025',159565,'q1'],['S1 2026',212300,'q1'],['S2 2026 · en curso',85500,'q2']],
-  note:`<b>El crecimiento semestral no se ha roto:</b> 77.200 € → 159.565 € → 212.300 €. El S2 2026 lleva <b>85.500 € en dos de sus seis meses</b> — vamos por delante del ritmo que necesitaríamos para volver a superar el semestre anterior.`}
+ mensual:{bars:[['Ene',60000,'q1'],['Feb',17300,'q1'],['Mar',42500,'q1'],['Abr',14300,'q1'],['May',26700,'q1'],['Jun',51500,'q1'],['Jul',47000,'q2'],['Ago',38500,'q2'],['Sep',16000,'q2']],
+  note:`<b>Facturación mensual del equipo · 2026</b> (calendario contable, cierre día 28). Verde = Q3. Julio (47.000 €) y agosto (38.500 €) fueron el mejor arranque de trimestre del año; septiembre se quedó en 16.000 €. Llevamos <b>313.800 € en nueve meses</b>.`},
+ trimestral:{bars:[['Q4 2025 · 20 ops',95600,'q1'],['Q1 2026 · 28 ops',119800,'q1'],['Q2 2026 · 22 ops',92500,'q1'],['Q3 2026 · 24 ops',101500,'q2']],
+  note:`<b>El equipo al completo</b> (Flor, Facundo, Isled, David y Kelvin): 95.600 € → 119.800 € → 92.500 € → <b>101.500 €</b>. El Q3 supera al Q2 en un 9,7% y en dos operaciones. El objetivo de Q4 (&gt;140.000 €) sería nuestro mejor trimestre.`},
+ semestral:{bars:[['S1 2025',77200,'q1'],['S2 2025',159565,'q1'],['S1 2026',212300,'q1'],['S2 2026 · en curso',101500,'q2']],
+  note:`<b>El crecimiento semestral sigue:</b> 77.200 € → 159.565 € → 212.300 €. El S2 2026 lleva <b>101.500 € a mitad de semestre</b> — con un Q4 de 140.000 € cerraríamos el año con 241.500 € en el semestre, otro récord.`}
 };
 function eur(n){return String(n).replace(/\B(?=(\d{3})+(?!\d))/g,'.')+' €';}
 function renderFact(view){
